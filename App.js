@@ -23,7 +23,9 @@ export default class App extends Component {
             longitude: -122.4324,
             latitudeDelta: 0.0922,
             longitudeDelta: 0.0421
-          }}>
+          }}
+          showsUserLocation={true}
+          showsMyLocationButton={true}>
           <MapView.Marker
             coordinate={{latitude: 37.78825, longitude: -122.4324}}
             title={"Marker"}
