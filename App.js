@@ -13,24 +13,50 @@ import {
   Platform
 } from 'react-native';
 import MapView from 'react-native-maps';
-import Marker from './components/Marker'; // TODO: Is default MapView.Marker good enough?
-import Networking from './components/Networking';
+import Marker from './src/components/Marker'; // TODO: Is default MapView.Marker good enough?
+import networking from './src/networking/networking';
 import RNFetchBlob from 'react-native-fetch-blob';
+import instagram from './src/models/instagram';
 
 export default class App extends Component {
+  constructor(props) {
+    super(props);
+
+    // Placeholder, doesn't really do anything yet
+    this.feed = instagram.objects('InstagramFeed');
+    this.feed.addListener((name, changes) => {
+      console.log("FEED changed: " + JSON.stringify(changes));
+    });
+
+    this.state = {};
+  }
+
   componentDidMount() {
     // TODO: Temporary test... also, image won't show up until app is reloaded after first-run
-    Networking.download(
+    networking.download(
       'https://facebook.github.io/react/img/', 'logo_og.png'
     )
     .then((res) => {
     })
   }
 
+  // TODO: Use the feed prop
+  FeedMarkers(images) {
+    return images.map(function(instagramImage, i) {
+      return(
+          <MapView.Marker
+            key={i}
+            coordinate={{latitude: instagramImage.latitude, longitude: instagramImage.longitude}}>
+            <Image
+              source={{uri: 'file:' + instagramImage.filePath}}
+              style={{width: 50, height: 50}} />
+          </MapView.Marker>
+      );
+    })
+  }
+
   render() {
-    // TODO: Temporary test
-    let dirs = RNFetchBlob.fs.dirs;
-    let filename = 'file:' + dirs.DocumentDir + '/user_images/' + 'logo_og.png';
+    let images = instagram.objects('InstagramImage');
 
     return (
       <View style={styles.container}>
@@ -43,12 +69,7 @@ export default class App extends Component {
             longitudeDelta: 0.0421}}
           showsUserLocation={true}
           showsMyLocationButton={true}>
-          <MapView.Marker
-            coordinate={{latitude: 37.78825, longitude: -122.4624}}>
-            <Image
-              source={{uri: filename}}
-              style={{width: 50, height: 50}} />
-          </MapView.Marker>
+          {this.FeedMarkers(images)}
         </MapView>
       </View>
     );

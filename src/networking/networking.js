@@ -1,7 +1,8 @@
 /**
- * Handle HTTP requests
+ * Handle HTTP/HTTPS requests
  */
 import RNFetchBlob from 'react-native-fetch-blob';
+import instagram from '../models/instagram';
 
 let dirs = RNFetchBlob.fs.dirs;
 
@@ -15,6 +16,14 @@ module.exports = {
       // Headers
     })
     .then((res) => {
+      instagram.write(() => {
+        let allImages = instagram.objects('InstagramImage');
+        instagram.delete(allImages);
+
+        instagram.create('InstagramImage',
+          {user: 'fonztagram', filePath: res.path(), creationDate: new Date(), latitude: 37.76325, longitude: -122.4324})
+      })
+
       return res;
     })
   }

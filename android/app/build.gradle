@@ -126,6 +126,7 @@ android {
 }
 
 dependencies {
+    compile project(':realm')
     compile project(':react-native-fetch-blob')
     compile project(':react-native-maps')
     compile fileTree(dir: "libs", include: ["*.jar"])

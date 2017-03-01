@@ -16,7 +16,7 @@ import resolveAssetSource from 'react-native/Libraries/Image/resolveAssetSource'
 import decorateMapComponent, {
   SUPPORTED,
   USES_DEFAULT_IMPLEMENTATION,
-} from '../node_modules/react-native-maps/components/decorateMapComponent';
+} from '../../node_modules/react-native-maps/components/decorateMapComponent';
 
 const viewConfig = {
   uiViewClassName: 'AIR<provider>MapMarker',
