@@ -1,11 +1,11 @@
 /**
-* Android entry point for the app
-* @flow
-*/
+ * Android entry point for the app
+ * @flow
+ */
 
 import React, { Component } from 'react';
 import { AppRegistry } from 'react-native';
-import App from './App';
+import App from './app/App';
 
 export default class MapWrapper extends Component {
   render() {

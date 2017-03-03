@@ -7,28 +7,21 @@ import React, { Component } from 'react';
 import {
   AppRegistry,
   StyleSheet,
-  Text,
   View,
-  Image,
-  Platform
+  Image
 } from 'react-native';
 import MapView from 'react-native-maps';
-import Marker from './src/components/Marker'; // TODO: Is default MapView.Marker good enough?
-import networking from './src/networking/networking';
-import RNFetchBlob from 'react-native-fetch-blob';
-import instagram from './src/models/instagram';
+import createStore from 'redux';
+import networking from './networking/networking';
+import instagram from './models/instagram';
 
 export default class App extends Component {
   constructor(props) {
     super(props);
 
-    // Placeholder, doesn't really do anything yet
-    this.feed = instagram.objects('InstagramFeed');
-    this.feed.addListener((name, changes) => {
-      console.log("FEED changed: " + JSON.stringify(changes));
-    });
-
-    this.state = {};
+    this.state = {
+      feeds: [] // A hashmap of geodata feeds where the key is the name of the feed
+    };
   }
 
   componentDidMount() {
@@ -37,12 +30,14 @@ export default class App extends Component {
       'https://facebook.github.io/react/img/', 'logo_og.png'
     )
     .then((res) => {
+      this.setState({
+        feeds: instagram.objects('InstagramImage')
+      });
     })
   }
 
-  // TODO: Use the feed prop
-  FeedMarkers(images) {
-    return images.map(function(instagramImage, i) {
+  FeedMarkers() {
+    return this.state.feeds.map(function(instagramImage, i) {
       return(
           <MapView.Marker
             key={i}
@@ -56,8 +51,6 @@ export default class App extends Component {
   }
 
   render() {
-    let images = instagram.objects('InstagramImage');
-
     return (
       <View style={styles.container}>
         <MapView
@@ -69,7 +62,7 @@ export default class App extends Component {
             longitudeDelta: 0.0421}}
           showsUserLocation={true}
           showsMyLocationButton={true}>
-          {this.FeedMarkers(images)}
+          {this.FeedMarkers()}
         </MapView>
       </View>
     );
