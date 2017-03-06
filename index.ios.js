@@ -3,13 +3,21 @@
  * @flow
  */
 
-import React, { Component } from 'react';
+import React, { Component } from 'react'
 import { AppRegistry } from 'react-native';
-import App from './app/App';
+import { Provider } from 'react-redux'
+import configureStore from './app/config/store'
+import App from './app/components/App'
+
+let store = configureStore();
 
 export default class MapWrapper extends Component {
   render() {
-    return <App />;
+    return (
+      <Provider store={store}>
+        <App />
+      </Provider>
+    )
   }
 }
 

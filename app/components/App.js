@@ -10,31 +10,30 @@ import {
   View,
   Image
 } from 'react-native';
+import { connect } from 'react-redux';
 import MapView from 'react-native-maps';
-import networking from './networking/networking';
-import configureStore from './config/store'
+import networking from '../networking/networking';
+import * as actions from '../actions/actions'
 
-const store = configureStore()
-
-export default class App extends Component {
+class App extends Component {
 
   componentDidMount() {
     // TODO: Temporary test... also, image won't show up until app is reloaded after first-run
-    networking.download(
-      store, 'https://facebook.github.io/react/img/', 'logo_og.png'
+    /*networking.download(
+      'https://facebook.github.io/react/img/', 'logo_og.png'
     )
     .then((res) => {
       this.setState({});  // Trigger a re-render
-    })
+    })*/
+    this.props.fetchData('https://www.instagram.com/fonztagram/media/');
   }
 
   FeedMarkers() {
-    console.log('state feeds: ' + JSON.stringify(store.getState()));
+    console.log('state feeds: ' + JSON.stringify(this.props.feeds));
 
-    return store.getState().feeds.map(function(feed) {
-      // TODO: This just draws all the markers without any sort of grouping at the moment
-      return feed.markers.map(function(instagramImage, i) {
-        return(
+    /*return this.props.feeds.map(
+      feed => feed.markers.map(
+        (instagramImage, i) =>
           <MapView.Marker
             key={i}
             coordinate={{latitude: instagramImage.latitude, longitude: instagramImage.longitude}}>
@@ -42,9 +41,8 @@ export default class App extends Component {
               source={{uri: 'file:' + instagramImage.filePath}}
               style={{width: 50, height: 50}} />
           </MapView.Marker>
-        );
-      });
-    })
+      )
+    );*/
   }
 
   render() {
@@ -65,6 +63,24 @@ export default class App extends Component {
     );
   }
 }
+
+const mapStateToProps = (state) => {
+  return {
+    feeds: state.feeds,
+    haveErrored: state.feedsHaveErrored,
+    areLoading: state.feedsAreLoading
+  };
+};
+
+const mapDispatchToProps = (dispatch) => {
+  console.log('mapDispatchToProps');
+
+  return {
+    fetchData: (url) => dispatch(actions.feedFetchData(url))
+  };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(App);
 
 const styles = StyleSheet.create({
   container: {

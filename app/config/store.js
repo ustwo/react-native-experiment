@@ -1,8 +1,15 @@
-import { createStore } from 'redux'
-import mapWrapperApp from '../reducers/reducers'
+import { createStore, applyMiddleware } from 'redux'
+import thunk from 'redux-thunk'
+import rootReducer from '../reducers'
+
+const initialState = {
+  feeds: []
+}
 
 export default function configureStore() {
-  let store = createStore(mapWrapperApp)
-
-  return store
+  return createStore(
+    rootReducer,
+    initialState,
+    applyMiddleware(thunk)
+  );
 }
