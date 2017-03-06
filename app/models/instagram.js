@@ -12,13 +12,4 @@ InstagramImage.schema = {
   }
 };
 
-class InstagramFeed extends Realm.Object {}
-InstagramFeed.schema = {
-  name: 'InstagramFeed',
-  properties: {
-    user: 'string',
-    images: {type: 'list', objectType: 'InstagramImage'}
-  }
-};
-
-export default new Realm({schema: [InstagramImage, InstagramFeed]});
+export default new Realm({schema: [InstagramImage]});

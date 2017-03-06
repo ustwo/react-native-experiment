@@ -3,11 +3,12 @@
  */
 import RNFetchBlob from 'react-native-fetch-blob';
 import instagram from '../models/instagram';
+import * as actions from '../actions/actions'
 
 let dirs = RNFetchBlob.fs.dirs;
 
 module.exports = {
-  download: function(baseUrl, filename) {
+  download: function(store, baseUrl, filename) {
     return RNFetchBlob.config({
       // TODO: Change path based on feed source and other parameters (e.g. username)
       path: dirs.DocumentDir + '/user_images/' + filename
@@ -23,6 +24,8 @@ module.exports = {
         instagram.create('InstagramImage',
           {user: 'fonztagram', filePath: res.path(), creationDate: new Date(), latitude: 37.76325, longitude: -122.4324})
       })
+
+      store.dispatch(actions.addFeed(instagram.objects('InstagramImage')));
 
       return res;
     })

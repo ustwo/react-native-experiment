@@ -13,7 +13,7 @@ export default function mapWrapperApp(state = initialState, action) {
         markers: action.markers
       });
 
-      console.log('ADDED NEW FEED.');
+      console.log('ADDED NEW FEED, length: ' + newState.feeds.length);
 
       return newState;
 

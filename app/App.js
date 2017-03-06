@@ -12,39 +12,29 @@ import {
 } from 'react-native';
 import MapView from 'react-native-maps';
 import networking from './networking/networking';
-import instagram from './models/instagram';
 import configureStore from './config/store'
-import * as actions from './actions/actions'
 
 const store = configureStore()
 
 export default class App extends Component {
-  constructor(props) {
-    super(props);
-
-    this.state = {
-      feeds: [] // A hashmap of geodata feeds where the key is the name of the feed
-    };
-  }
 
   componentDidMount() {
     // TODO: Temporary test... also, image won't show up until app is reloaded after first-run
     networking.download(
-      'https://facebook.github.io/react/img/', 'logo_og.png'
+      store, 'https://facebook.github.io/react/img/', 'logo_og.png'
     )
     .then((res) => {
-      this.setState({
-        feeds: instagram.objects('InstagramImage')
-      });
-
-      // redux test
-      store.dispatch(actions.addFeed(instagram.objects('InstagramImage')));
+      this.setState({});  // Trigger a re-render
     })
   }
 
   FeedMarkers() {
-    return this.state.feeds.map(function(instagramImage, i) {
-      return(
+    console.log('state feeds: ' + JSON.stringify(store.getState()));
+
+    return store.getState().feeds.map(function(feed) {
+      // TODO: This just draws all the markers without any sort of grouping at the moment
+      return feed.markers.map(function(instagramImage, i) {
+        return(
           <MapView.Marker
             key={i}
             coordinate={{latitude: instagramImage.latitude, longitude: instagramImage.longitude}}>
@@ -52,7 +42,8 @@ export default class App extends Component {
               source={{uri: 'file:' + instagramImage.filePath}}
               style={{width: 50, height: 50}} />
           </MapView.Marker>
-      );
+        );
+      });
     })
   }
 
