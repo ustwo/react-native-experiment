@@ -11,9 +11,12 @@ import {
   Image
 } from 'react-native';
 import MapView from 'react-native-maps';
-import createStore from 'redux';
 import networking from './networking/networking';
 import instagram from './models/instagram';
+import configureStore from './config/store'
+import * as actions from './actions/actions'
+
+const store = configureStore()
 
 export default class App extends Component {
   constructor(props) {
@@ -33,6 +36,9 @@ export default class App extends Component {
       this.setState({
         feeds: instagram.objects('InstagramImage')
       });
+
+      // redux test
+      store.dispatch(actions.addFeed(instagram.objects('InstagramImage')));
     })
   }
 

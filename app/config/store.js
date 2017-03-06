@@ -1,4 +1,8 @@
-import createStore from 'redux'
+import { createStore } from 'redux'
 import mapWrapperApp from '../reducers/reducers'
 
-let store = createStore(mapWrapperApp)
+export default function configureStore() {
+  let store = createStore(mapWrapperApp)
+
+  return store
+}

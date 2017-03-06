@@ -1,41 +1,37 @@
-import { combineReducers } from 'redux'
-import { ADD_FEED, REMOVE_FEED } from '../actions/actions'
+import { ADD_FEED, REMOVE_FEED, CLEAR_FEEDS } from '../actions/actions'
 
 const initialState = {
   feeds: []
 }
 
-function mapWrapperApp(state = initialState, action) {
+export default function mapWrapperApp(state = initialState, action) {
   switch (action.type) {
     case ADD_FEED:
-      return state
+      var newState = Object.assign({}, state);
+
+      newState.feeds.push({
+        markers: action.markers
+      });
+
+      console.log('ADDED NEW FEED.');
+
+      return newState;
+
     case REMOVE_FEED:
-      return state
+      var feeds = [].concat(state.feeds);
+
+      feeds.splice(action.id, 1);
+
+      return Object.assign({}, state, {
+        feeds: feeds
+      });
+
+    case CLEAR_FEEDS:
+      return Object.assign({}, state, {
+        feeds: []
+      });
+
     default:
       return state
   }
 }
-
-/*
-function feeds(state = [], action) {
-  switch (action.type) {
-    case ADD_FEED:
-      return [
-        ...state,
-        {
-          //stuff
-        }
-      ]
-    case REMOVE_FEED:
-      return ''
-    default:
-      return state
-  }
-}
-
-const mapWrapperApp = combineReducers({
-  feeds
-})
-*/
-
-export default mapWrapperApp
