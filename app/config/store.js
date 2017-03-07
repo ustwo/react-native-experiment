@@ -3,7 +3,9 @@ import thunk from 'redux-thunk'
 import rootReducer from '../reducers'
 
 const initialState = {
-  feeds: []
+  feeds: [],
+  feedsHaveErrored: false,
+  feedsAreLoading: false
 }
 
 export default function configureStore() {

@@ -1,9 +1,7 @@
 /*
 * action types
 */
-/*export const ADD_FEED = 'ADD_FEED'
-export const REMOVE_FEED = 'REMOVE_FEED'
-export const CLEAR_FEEDS = 'CLEAR_FEEDS'*/
+
 export const FEEDS_HAVE_ERRORED = 'FEEDS_HAVE_ERRORED'
 export const FEEDS_ARE_LOADING = 'FEEDS_ARE_LOADING'
 export const FEEDS_FETCH_SUCCESS = 'FEEDS_FETCH_SUCCESS'
@@ -11,25 +9,6 @@ export const FEEDS_FETCH_SUCCESS = 'FEEDS_FETCH_SUCCESS'
 /*
 * action creators
 */
-/*export function addFeed(mapMarkers) {
-  return {
-    type: ADD_FEED,
-    markers: mapMarkers
-  };
-}
-
-export function removeFeed(id) {
-  return {
-    type: REMOVE_FEED,
-    id: id
-  };
-}
-
-export function clearFeeds() {
-  return {
-    type: CLEAR_FEEDS
-  };
-}*/
 
 export function feedsHaveErrored(bool) {
   return {
@@ -45,14 +24,20 @@ export function feedsAreLoading(bool) {
   };
 }
 
-export function feedsFetchSuccess(feeds) {
+export function feedsFetchSuccess(url, feed) {
   return {
     type: FEEDS_FETCH_SUCCESS,
-    feeds: feeds
+    url,  // ES6 shorthand
+    feed
   };
 }
 
-export function feedFetchData(url) {
+/*
+ * An action creator that dispatches one of the action creators above
+ * depending on the status of the fetched data. Each of the actions
+ * addresses only a part of the store in order to separate concerns.
+ */
+export default function feedFetchData(url) {
   console.log('feedFetchData with url: ' + url);
 
   return (dispatch) => {
@@ -68,8 +53,8 @@ export function feedFetchData(url) {
 
       return response;
     })
-    .then((response) => response.json())
-    .then((feeds) => dispatch(feedsFetchSuccess(feeds)))
+    .then(response => response.json())
+    .then(feed => dispatch(feedsFetchSuccess(url, feed)))
     .catch(() => dispatch(feedsHaveErrored(true)));
   };
 }

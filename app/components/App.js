@@ -13,7 +13,7 @@ import {
 import { connect } from 'react-redux';
 import MapView from 'react-native-maps';
 import networking from '../networking/networking';
-import * as actions from '../actions/actions'
+import feedFetchData from '../actions/actions'
 
 class App extends Component {
 
@@ -76,7 +76,7 @@ const mapDispatchToProps = (dispatch) => {
   console.log('mapDispatchToProps');
 
   return {
-    fetchData: (url) => dispatch(actions.feedFetchData(url))
+    fetchData: (url) => dispatch(feedFetchData(url))
   };
 };
 
