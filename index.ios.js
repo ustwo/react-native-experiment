@@ -11,7 +11,7 @@ import App from './app/components/App'
 
 let store = configureStore();
 
-export default class MapWrapper extends Component {
+export default class MapMixer extends Component {
   render() {
     return (
       <Provider store={store}>
@@ -21,4 +21,4 @@ export default class MapWrapper extends Component {
   }
 }
 
-AppRegistry.registerComponent('MapWrapper', () => MapWrapper);
+AppRegistry.registerComponent('MapMixer', () => MapMixer);
