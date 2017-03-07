@@ -13,6 +13,17 @@ import {
 
 export default class MyWeb extends Component {
 
+  constructor(props) {
+    super(props);
+
+    this.initialState = {
+      url: this.props.uri,
+      isLoading: true
+    };
+
+    this.state = this.initialState;
+  }
+
   onPressBack() {
     this.props.navigator.pop();
   }
@@ -38,11 +49,42 @@ export default class MyWeb extends Component {
             <WebView
               source={{uri: this.props.uri}}
               style={{marginTop: 20}}
+              onShouldStartLoadWithRequest={this.onShouldStartLoadWithRequest}
+              onNavigationStateChange={this.onNavigationStateChange}
+              scalePagesToFit={true}
             />
           </View>
         </View>
       </Container>
     );
+  }
+
+  onShouldStartLoadWithRequest = (event) => {
+    console.log('onShouldStartLoadWithRequest with event: ' + JSON.stringify(event));
+    var urlToLoad = event['url'];
+
+    if (urlToLoad.indexOf("access_token=") > -1) {
+      var stringParts = urlToLoad.split("access_token=");
+      var accessToken = stringParts.pop();
+
+      console.log("URL TO LOAD: " + urlToLoad + " AND ACCESS TOKEN: " + accessToken);
+
+      // TODO: If token is already and user navigates to this view,
+      //       show alert that user is already logged in and will be
+      //       taken to the map
+      this.props.navigator.pop();
+
+      return false;
+    }
+
+    return true;
+  }
+
+  onNavigationStateChange = (navState) => {
+    this.setState({
+      url: navState.url,
+      isLoading: navState.loading
+    })
   }
 }
 
