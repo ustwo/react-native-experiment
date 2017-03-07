@@ -5,7 +5,10 @@ import {
   Header,
   Button,
   Icon,
-	Title
+	Title,
+  Left,
+  Body,
+  Right
 } from 'native-base';
 
 export default class MyWeb extends Component {
@@ -19,12 +22,17 @@ export default class MyWeb extends Component {
       <Container>
         <View style={styles.container}>
           <Header>
-            <Button
-              onPress={() => this.onPressBack()}
-              transparent>
-              <Icon name="ios-arrow-back" />
-            </Button>
-            <Title>Instagram Login</Title>
+            <Left>
+              <Button
+                onPress={() => this.onPressBack()}
+                transparent>
+                <Icon name="ios-arrow-back" />
+              </Button>
+            </Left>
+            <Body>
+              <Title>Instagram</Title>
+            </Body>
+            <Right />
           </Header>
           <View style={styles.content}>
             <WebView

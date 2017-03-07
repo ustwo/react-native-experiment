@@ -1,9 +1,9 @@
 import React, { Component, PropTypes } from 'react';
-import dismissKeyboard from 'react-native/Libraries/Utilities/dismissKeyboard';
-import { StyleSheet, TouchableWithoutFeedback } from 'react-native';
+import { StyleSheet } from 'react-native';
 import {
 	Container,
   Header,
+	Body,
 	Title,
 	InputGroup,
 	Input,
@@ -15,6 +15,7 @@ import {
 } from 'native-base';
 
 import InstagramAuth from './InstagramAuth';
+import MapScreen from './MapScreen';
 
 export default class LoginScreen extends Component {
 
@@ -43,9 +44,7 @@ export default class LoginScreen extends Component {
       isLoading: true,
       error: ''
     });
-    dismissKeyboard();
 
-		const routeStack = this.props.navigator.getCurrentRoutes();
 		this.props.navigator.push({
 			component: InstagramAuth,
 			passProps: {
@@ -54,32 +53,33 @@ export default class LoginScreen extends Component {
 		});
   }
 
+	onPressMap() {
+		this.props.navigator.push({
+			component: MapScreen
+		})
+	}
+
   render() {
     return (
       <Container>
         <View style={styles.container}>
           <Header>
-            <Title>Login</Title>
+            <Body>
+							<Title>Login</Title>
+						</Body>
           </Header>
-          <TouchableWithoutFeedback onPress={dismissKeyboard}>
-            <View style={styles.content}>
-              <InputGroup style={styles.input}>
-                <Icon style={styles.inputIcon} name="ios-person" />
-                <Input
-                  placeholder="Username"
-                  autoCorrect={false}
-                  autoCapitalize="none"
-                  onChangeText={username => this.setState( { username })}
-                  value={this.state.username}
-                />
-              </InputGroup>
-							<Button
-								style={styles.button}
-								onPress={() => this.onPressLogin()}>
-								<Text>Login</Text>
-							</Button>
-            </View>
-          </TouchableWithoutFeedback>
+					<View style={styles.content}>
+						<Button
+							style={styles.button}
+							onPress={() => this.onPressLogin()}>
+							<Text>Login</Text>
+						</Button>
+						<Button
+							style={styles.button}
+							onPress={() => this.onPressMap()}>
+							<Text>View Map</Text>
+						</Button>
+					</View>
         </View>
       </Container>
     )
@@ -98,24 +98,9 @@ const styles = StyleSheet.create({
 		padding: 30,
 		flex: 1,
 	},
-	shadow: {
-		flex: 1,
-		width: null,
-		height: null,
-	},
-	inputIcon: {
-		width: 30,
-	},
-	input: {
-		marginBottom: 20,
-	},
 	button: {
 		marginTop: 20,
 		alignSelf: 'center',
 		width: 150,
-	},
-	error: {
-		color: 'red',
-		marginBottom: 20,
 	}
 });
