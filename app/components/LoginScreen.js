@@ -14,6 +14,8 @@ import {
 	Spinner
 } from 'native-base';
 
+import InstagramAuth from './InstagramAuth';
+
 export default class LoginScreen extends Component {
 
   static propTypes = {
@@ -43,7 +45,13 @@ export default class LoginScreen extends Component {
     });
     dismissKeyboard();
 
-    console.log("ON PRESS LOGIN.");
+		const routeStack = this.props.navigator.getCurrentRoutes();
+		this.props.navigator.push({
+			component: InstagramAuth,
+			passProps: {
+				uri: 'https://www.instagram.com/oauth/authorize/?client_id=89296477080d409693a2e8cfcf1c1b5d&redirect_uri=https://www.ustwo.com&response_type=code'
+			}
+		});
   }
 
   render() {
@@ -65,26 +73,17 @@ export default class LoginScreen extends Component {
                   value={this.state.username}
                 />
               </InputGroup>
+							<Button
+								style={styles.button}
+								onPress={() => this.onPressLogin()}>
+								<Text>Login</Text>
+							</Button>
             </View>
           </TouchableWithoutFeedback>
         </View>
       </Container>
     )
   }
-
-  /*render() {
-    const goToMap = () => {
-      Actions.mapScreen();
-    }
-
-    return (
-      <View style={styles.container}>
-        <Button
-          onPress={goToMap}
-          title="Go To Map" />
-      </View>
-    )
-  }*/
 }
 
 const styles = StyleSheet.create({
@@ -118,14 +117,5 @@ const styles = StyleSheet.create({
 	error: {
 		color: 'red',
 		marginBottom: 20,
-	},
+	}
 });
-
-/*var styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#FFCCCC'
-  }
-});*/

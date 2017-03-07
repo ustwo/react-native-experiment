@@ -6,8 +6,8 @@
 import React, { Component } from 'react';
 import { StyleSheet, Navigator, View } from 'react-native';
 
-import LoginScreen from './LoginScreen'
-import MapScreen from './MapScreen'
+import LoginScreen from './LoginScreen';
+import MapScreen from './MapScreen';
 
 const routeStack = [
   { name: 'Login', component: LoginScreen },
