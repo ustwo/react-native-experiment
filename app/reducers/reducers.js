@@ -1,6 +1,19 @@
 import {
-  FEEDS_HAVE_ERRORED, FEEDS_ARE_LOADING, FEEDS_FETCH_SUCCESS
+  RECEIVED_INSTAGRAM_ACCESS_TOKEN,
+  FEEDS_HAVE_ERRORED,
+  FEEDS_ARE_LOADING,
+  FEEDS_FETCH_SUCCESS
 } from '../actions/actions';
+
+export function receivedInstagramAccessToken(state = '', action) {
+  switch (action.type) {
+    case RECEIVED_INSTAGRAM_ACCESS_TOKEN:
+      return action.accessToken;
+
+    default:
+      return state;
+  }
+}
 
 export function feedsHaveErrored(state = false, action) {
   switch (action.type) {

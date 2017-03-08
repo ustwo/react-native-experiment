@@ -7,6 +7,7 @@ import {
 } from 'react-native';
 import { connect } from 'react-redux';
 import MapView from 'react-native-maps';
+
 import networking from '../networking/networking';
 import feedFetchData from '../actions/actions'
 
@@ -20,7 +21,8 @@ class MapScreen extends Component {
     .then((res) => {
       this.setState({});  // Trigger a re-render
     })*/
-    this.props.fetchData('https://www.instagram.com/fonztagram/media/');
+    //this.props.fetchData('https://www.instagram.com/fonztagram/media/');
+    this.props.fetchData('https://api.instagram.com/v1/locations/search?lat=37.78825&lng=-122.4324&access_token=' + this.props.instagramAccessToken);
   }
 
   FeedMarkers() {
@@ -61,6 +63,7 @@ class MapScreen extends Component {
 
 const mapStateToProps = (state) => {
   return {
+    instagramAccessToken: state.receivedInstagramAccessToken,
     feeds: state.feeds,
     haveErrored: state.feedsHaveErrored,
     areLoading: state.feedsAreLoading
@@ -68,8 +71,6 @@ const mapStateToProps = (state) => {
 };
 
 const mapDispatchToProps = (dispatch) => {
-  console.log('mapDispatchToProps');
-
   return {
     fetchData: (url) => dispatch(feedFetchData(url))
   };

@@ -8,17 +8,23 @@ import {
 	Title,
   Left,
   Body,
-  Right
+  Right,
+	Text
 } from 'native-base';
+import { connect } from 'react-redux';
 
-export default class MyWeb extends Component {
+import { receivedInstagramAccessToken } from '../actions/actions'
+import MapScreen from './MapScreen'
+
+class InstagramAuth extends Component {
 
   constructor(props) {
     super(props);
 
     this.initialState = {
       url: this.props.uri,
-      isLoading: true
+      isLoading: true,
+			isLoggedIn: false
     };
 
     this.state = this.initialState;
@@ -27,6 +33,12 @@ export default class MyWeb extends Component {
   onPressBack() {
     this.props.navigator.pop();
   }
+
+	onPressMap() {
+		this.props.navigator.replace({
+			component: MapScreen
+		})
+	}
 
   render() {
     return (
@@ -46,13 +58,23 @@ export default class MyWeb extends Component {
             <Right />
           </Header>
           <View style={styles.content}>
-            <WebView
-              source={{uri: this.props.uri}}
-              style={{marginTop: 20}}
-              onShouldStartLoadWithRequest={this.onShouldStartLoadWithRequest}
-              onNavigationStateChange={this.onNavigationStateChange}
-              scalePagesToFit={true}
-            />
+						{ this.state.isLoggedIn ?
+							<View>
+								<Text>You are logged in</Text>
+								<Button
+									style={styles.button}
+									onPress={() => this.onPressMap()}>
+									<Text>View Map</Text>
+								</Button>
+							</View> :
+							<WebView
+	              source={{uri: this.props.uri}}
+	              style={{marginTop: 20}}
+	              onShouldStartLoadWithRequest={this.onShouldStartLoadWithRequest}
+	              onNavigationStateChange={this.onNavigationStateChange}
+	              scalePagesToFit={true}
+	            />
+						}
           </View>
         </View>
       </Container>
@@ -60,19 +82,17 @@ export default class MyWeb extends Component {
   }
 
   onShouldStartLoadWithRequest = (event) => {
-    console.log('onShouldStartLoadWithRequest with event: ' + JSON.stringify(event));
     var urlToLoad = event['url'];
 
     if (urlToLoad.indexOf("access_token=") > -1) {
       var stringParts = urlToLoad.split("access_token=");
       var accessToken = stringParts.pop();
 
-      console.log("URL TO LOAD: " + urlToLoad + " AND ACCESS TOKEN: " + accessToken);
+			this.props.saveAccessToken(accessToken);
 
-      // TODO: If token is already and user navigates to this view,
-      //       show alert that user is already logged in and will be
-      //       taken to the map
-      this.props.navigator.pop();
+			this.setState({
+				isLoggedIn: true
+			})
 
       return false;
     }
@@ -88,6 +108,14 @@ export default class MyWeb extends Component {
   }
 }
 
+const mapDispatchToProps = (dispatch) => {
+  return {
+    saveAccessToken: (accessToken) => dispatch(receivedInstagramAccessToken(accessToken))
+  };
+};
+
+export default connect(null, mapDispatchToProps)(InstagramAuth);
+
 const styles = StyleSheet.create({
 	container: {
 		position: 'absolute',
@@ -99,5 +127,10 @@ const styles = StyleSheet.create({
 	content: {
 		padding: 0,
 		flex: 1,
+	},
+	button: {
+		marginTop: 20,
+		alignSelf: 'center',
+		width: 150,
 	}
 });

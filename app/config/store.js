@@ -3,6 +3,7 @@ import thunk from 'redux-thunk'
 import rootReducer from '../reducers'
 
 const initialState = {
+  receivedInstagramAccessToken: '',
   feeds: [],
   feedsHaveErrored: false,
   feedsAreLoading: false

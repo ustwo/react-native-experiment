@@ -48,7 +48,7 @@ export default class LoginScreen extends Component {
 		this.props.navigator.push({
 			component: InstagramAuth,
 			passProps: {
-				uri: 'https://www.instagram.com/oauth/authorize/?client_id=89296477080d409693a2e8cfcf1c1b5d&redirect_uri=https://www.ustwo.com&response_type=token'
+				uri: 'https://www.instagram.com/oauth/authorize/?client_id=89296477080d409693a2e8cfcf1c1b5d&redirect_uri=https://www.ustwo.com&response_type=token&scope=public_content'
 			}
 		});
   }

@@ -1,7 +1,13 @@
 import { combineReducers } from 'redux';
-import { feeds, feedsHaveErrored, feedsAreLoading } from './reducers';
+import {
+  receivedInstagramAccessToken,
+  feeds,
+  feedsHaveErrored,
+  feedsAreLoading
+} from './reducers';
 
 export default combineReducers({
+  receivedInstagramAccessToken,
   feeds,
   feedsHaveErrored,
   feedsAreLoading
