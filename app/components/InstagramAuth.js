@@ -81,14 +81,20 @@ class InstagramAuth extends Component {
     );
   }
 
+	extractAccessTokenFromUrl(url) {
+		var stringParts = url.split("access_token=");
+		var accessToken = stringParts.pop();
+
+		return accessToken;
+	}
+
   onShouldStartLoadWithRequest = (event) => {
     var urlToLoad = event['url'];
 
-    if (urlToLoad.indexOf("access_token=") > -1) {
-      var stringParts = urlToLoad.split("access_token=");
-      var accessToken = stringParts.pop();
+		console.log("onShouldStartLoadWithRequest: " + urlToLoad);
 
-			this.props.saveAccessToken(accessToken);
+    if (urlToLoad.indexOf("access_token=") > -1) {
+			this.props.saveAccessToken(this.extractAccessTokenFromUrl(urlToLoad));
 
 			this.setState({
 				isLoggedIn: true
@@ -100,11 +106,28 @@ class InstagramAuth extends Component {
     return true;
   }
 
+	/*
+	 * Preferably, we want to get the token from the URL before the page loads.
+	 * However, onShouldStartLoadWithRequest isn't currently able to be called
+	 * in Android, so we we need a workaround here.
+	 */
   onNavigationStateChange = (navState) => {
-    this.setState({
-      url: navState.url,
-      isLoading: navState.loading
-    })
+		var currentUrl = navState.url;
+
+		if (currentUrl.indexOf("access_token=") > -1) {
+			this.props.saveAccessToken(this.extractAccessTokenFromUrl(currentUrl));
+
+			this.setState({
+				url: navState.url,
+	      isLoading: navState.loading,
+				isLoggedIn: true
+			})
+		} else {
+			this.setState({
+	      url: navState.url,
+	      isLoading: navState.loading
+	    })
+		}
   }
 }
 
