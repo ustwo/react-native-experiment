@@ -24,6 +24,7 @@ class MapScreen extends Component {
     return this.props.feeds.map(  // Iterate through the master feeds array that contains individual feeds
       feed => feed.feed.map(      // Iterate through the marker data contained in each individual feed
         (markerData, i) =>
+          // See MarkerData for available feeds (NOTE: Not actually using MarkerData at the moment, but we will)
           <MapView.Marker
             key={i}
             coordinate={{latitude: markerData.latitude, longitude: markerData.longitude}}>
