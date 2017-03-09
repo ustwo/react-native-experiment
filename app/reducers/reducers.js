@@ -5,6 +5,8 @@ import {
   FEEDS_FETCH_SUCCESS
 } from '../actions/actions';
 
+import MarkerFactory from '../models/MarkerFactory'
+
 export function receivedInstagramAccessToken(state = '', action) {
   switch (action.type) {
     case RECEIVED_INSTAGRAM_ACCESS_TOKEN:
@@ -41,10 +43,25 @@ export function feeds(state = [], action) {
       // Add the new feed to the existing list of feeds
       // TODO: Use an actual list of geolocation items instead of placeholder data
       var newState = Object.assign([], state);
-      newState.push({
-        url: action.url,
-        feed: action.feed
-      });
+
+      // Extract the hostname from the provided URL
+      var url = action.url;
+      var indexOfDoubleSlash = url.indexOf('://');
+      var indexOfDotCom = url.indexOf('.com/'); // TODO: Support other extensions?
+      var hostname = url.substring(indexOfDoubleSlash + 3, indexOfDotCom + 4);
+
+      // Grab the relevant data, which differs between feed sources
+      if (action.url.indexOf("access_token=") > -1) {
+        newState.push({
+          source: hostname,
+          feed: MarkerFactory.build(hostname, action)
+        });
+      } else {
+        newState.push({
+          source: action.url,
+          feed: action.feed
+        });
+      }
 
       return newState;
 

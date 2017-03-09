@@ -14,32 +14,22 @@ import feedFetchData from '../actions/actions'
 class MapScreen extends Component {
 
   componentDidMount() {
-    // TODO: Temporary test... also, image won't show up until app is reloaded after first-run
-    /*networking.download(
-      'https://facebook.github.io/react/img/', 'logo_og.png'
-    )
-    .then((res) => {
-      this.setState({});  // Trigger a re-render
-    })*/
-    //this.props.fetchData('https://www.instagram.com/fonztagram/media/');
+    // This dispatch, once its async task completes, will update the feeds in the local state (triggering a re-render)
     this.props.fetchData('https://api.instagram.com/v1/locations/search?lat=37.78825&lng=-122.4324&access_token=' + this.props.instagramAccessToken);
   }
 
   FeedMarkers() {
     console.log('state feeds: ' + JSON.stringify(this.props.feeds));
 
-    /*return this.props.feeds.map(
-      feed => feed.markers.map(
-        (instagramImage, i) =>
+    return this.props.feeds.map(  // Iterate through the master feeds array that contains individual feeds
+      feed => feed.feed.map(      // Iterate through the marker data contained in each individual feed
+        (markerData, i) =>
           <MapView.Marker
             key={i}
-            coordinate={{latitude: instagramImage.latitude, longitude: instagramImage.longitude}}>
-            <Image
-              source={{uri: 'file:' + instagramImage.filePath}}
-              style={{width: 50, height: 50}} />
+            coordinate={{latitude: markerData.latitude, longitude: markerData.longitude}}>
           </MapView.Marker>
       )
-    );*/
+    );
   }
 
   render() {
