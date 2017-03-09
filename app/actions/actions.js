@@ -49,6 +49,7 @@ export default function feedFetchData(url) {
   console.log('feedFetchData with url: ' + url);
 
   return (dispatch) => {
+    dispatch(feedsHaveErrored(false));
     dispatch(feedsAreLoading(true));
 
     fetch(url)

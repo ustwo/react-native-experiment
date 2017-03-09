@@ -40,6 +40,7 @@ export function feedsAreLoading(state = false, action) {
 export function feeds(state = [], action) {
   switch (action.type) {
     case FEEDS_FETCH_SUCCESS:
+      console.log("action url: " + action.url);// + ", with feed: " + JSON.stringify(action.feed)); stringifying the feed causes an error
       // Add the new feed to the existing list of feeds
       var newState = Object.assign([], state);
 
@@ -48,6 +49,8 @@ export function feeds(state = [], action) {
       var indexOfDoubleSlash = url.indexOf('://');
       var indexOfDotCom = url.indexOf('.com/'); // TODO: Support other extensions?
       var hostname = url.substring(indexOfDoubleSlash + 3, indexOfDotCom + 4);
+
+      console.log("hostname: " + hostname);
 
       newState.push({
         source: hostname,

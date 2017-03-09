@@ -11,22 +11,31 @@ export default class MarkerFactory {
       var firstElement = data[0];
 
       if ('latitude' in firstElement) {
-        return createMarkers(data); // TODO: Some type of markers
+        return data; // TODO: Some type of markers
       } else if ('filter' in firstElement) {
-        return createMarkers(data); // TODO: Markers that display an image
+        return data; // TODO: Markers that display an image
       } else {
-        return createMarkers(data); // TODO: Defeult instagram markers
+        return data; // TODO: Defeult instagram markers
       }
-    } else if (hostname.indexOf('expedia') > -1) {
-      return createMarkers(data);   // TODO: Parse expedia's data and map it to our universal marker
+    } else if (hostname.indexOf('maps.googleapis') > -1) {  // maps.googleapis.com
+      var markers = [];
+
+      var keys = Object.keys(feed['results']);
+
+      for (key in keys) {
+        var result = feed['results'][key];
+        var location = result['geometry']['location'];
+
+        // TODO: Use standardized marker model
+        markers.push({
+          latitude: location['lat'],
+          longitude: location['lng']
+        });
+      }
+
+      return markers;
     } else {
-      return createMarkers(data);   // TODO: Default marker
+      return feed;
     }
   }
-}
-
-function createMarkers(dataArray) {
-  console.log("createMarkers, dataArray length: " + dataArray.length);
-
-  return dataArray;
 }

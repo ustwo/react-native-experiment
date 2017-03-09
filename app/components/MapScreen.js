@@ -14,12 +14,13 @@ import feedFetchData from '../actions/actions'
 class MapScreen extends Component {
 
   componentDidMount() {
-    // This dispatch, once its async task completes, will update the feeds in the local state (triggering a re-render)
+    // These dispatches, once the async tasks complete, will update the feeds in the local state (triggering a re-render)
     this.props.fetchData('https://api.instagram.com/v1/locations/search?lat=37.78825&lng=-122.4324&access_token=' + this.props.instagramAccessToken);
+    this.props.fetchData('https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=37.778825,-122.4324&radius=1400&type=food&key=AIzaSyD-d7MKoxPuq0XvV3BGXMbuBLRIlo1GX4U');
   }
 
   FeedMarkers() {
-    console.log('state feeds: ' + JSON.stringify(this.props.feeds));
+    //console.log('state feeds: ' + JSON.stringify(this.props.feeds));
 
     return this.props.feeds.map(  // Iterate through the master feeds array that contains individual feeds
       feed => feed.feed.map(      // Iterate through the marker data contained in each individual feed
