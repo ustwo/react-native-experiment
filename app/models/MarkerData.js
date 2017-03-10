@@ -1,17 +1,34 @@
-import Realm from 'realm';
+export default class MarkerData {
 
-class MarkerData extends Realm.Object {}
-MarkerData.schema = {
-  name: 'MarkerData',
-  properties: {
-    locationId: 'int',
-    locationName: 'string',
-    user: 'string',
-    filePath: 'string',
-    creationDate: 'date',
-    latitude: 'double',
-    longitude: 'double'
+  constructor(locationId) {
+    this._locationId = locationId;
   }
-};
 
-export default new Realm({schema: [MarkerData]});
+  get locationId() {
+    return this._locationId;
+  }
+
+  set name(name) {
+    this._name = name;
+  }
+
+  get name() {
+    return this._name;
+  }
+
+  set latitude(latitude) {
+    this._latitude = latitude;
+  }
+
+  get latitude() {
+    return this._latitude;
+  }
+
+  set longitude(longitude) {
+    this._longitude = longitude;
+  }
+
+  get longitude() {
+    return this._longitude;
+  }
+}

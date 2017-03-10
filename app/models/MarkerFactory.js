@@ -11,7 +11,18 @@ export default class MarkerFactory {
       var firstElement = data[0];
 
       if ('latitude' in firstElement) {
-        return data; // TODO: Some type of markers
+        var markers = [];
+
+        data.map(locationData => {
+          var markerData = new MarkerData(locationData['id']);
+          markerData.name = locationData['name'];
+          markerData.latitude = locationData['latitude'];
+          markerData.longitude = locationData['longitude'];
+
+          markers.push(markerData);
+        });
+
+        return markers;
       } else if ('filter' in firstElement) {
         return data; // TODO: Markers that display an image
       } else {
@@ -24,13 +35,15 @@ export default class MarkerFactory {
 
       for (key in keys) {
         var result = feed['results'][key];
-        var location = result['geometry']['location'];
 
-        // TODO: Use standardized marker model
-        markers.push({
-          latitude: location['lat'],
-          longitude: location['lng']
-        });
+        var markerData = new MarkerData(result['id']);
+        markerData.name = result['name'];
+
+        var location = result['geometry']['location'];
+        markerData.latitude = location['lat'];
+        markerData.longitude = location['lng'];
+
+        markers.push(markerData);
       }
 
       return markers;
