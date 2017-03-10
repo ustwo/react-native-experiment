@@ -45,7 +45,7 @@ export function feedsFetchSuccess(url, feed) {
  * depending on the status of the fetched data. Each of the actions
  * addresses only a part of the store in order to separate concerns.
  */
-export default function feedFetchData(url) {
+export function feedFetchData(url) {
   console.log('feedFetchData with url: ' + url);
 
   return (dispatch) => {

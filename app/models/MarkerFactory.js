@@ -17,8 +17,6 @@ export default class MarkerFactory {
       } else {
         return data; // TODO: Defeult instagram markers
       }
-
-
     } else if (hostname.indexOf('maps.googleapis') > -1) {  // maps.googleapis.com
       return getGoogleMarkers(feed);
     } else {
