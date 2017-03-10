@@ -44,13 +44,7 @@ export function feeds(state = [], action) {
       // Add the new feed to the existing list of feeds
       var newState = Object.assign([], state);
 
-      // Extract the hostname from the provided URL
-      var url = action.url;
-      var indexOfDoubleSlash = url.indexOf('://');
-      var indexOfDotCom = url.indexOf('.com/'); // TODO: Support other extensions?
-      var hostname = url.substring(indexOfDoubleSlash + 3, indexOfDotCom + 4);
-
-      console.log("hostname: " + hostname);
+      var hostname = getHostname(action.url);
 
       newState.push({
         source: hostname,
@@ -62,4 +56,13 @@ export function feeds(state = [], action) {
     default:
       return state;
   }
+}
+
+/*
+ * Extract the hostname from the provided URL
+ */
+function getHostname(url) {
+  var indexOfDoubleSlash = url.indexOf('://');
+  var indexOfDotCom = url.indexOf('.com/'); // TODO: Support other extensions?
+  return url.substring(indexOfDoubleSlash + 3, indexOfDotCom + 4);
 }
