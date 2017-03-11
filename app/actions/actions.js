@@ -6,6 +6,7 @@ export const RECEIVED_INSTAGRAM_ACCESS_TOKEN = 'RECEIVED_INSTAGRAM_ACCESS_TOKEN'
 export const FEEDS_HAVE_ERRORED = 'FEEDS_HAVE_ERRORED'
 export const FEEDS_ARE_LOADING = 'FEEDS_ARE_LOADING'
 export const FEEDS_FETCH_SUCCESS = 'FEEDS_FETCH_SUCCESS'
+export const UPDATE_THUMBNAIL_PATH = 'UPDATE_THUMBNAIL_PATH'
 
 /*
 * action creators
@@ -66,4 +67,16 @@ export function feedFetchData(url) {
     .then(feed => dispatch(feedsFetchSuccess(url, feed)))
     .catch(() => dispatch(feedsHaveErrored(true)));
   };
+}
+
+/*
+ * Will set the thumbnailPath property of the MarkerData object in the
+ * store's feed that matches the locationName, triggering a re-render.
+ */
+export function updateMarkerThumbnail(locationName, thumbnailPath) {
+  return {
+    type: UPDATE_THUMBNAIL_PATH,
+    locationName,
+    thumbnailPath
+  }
 }

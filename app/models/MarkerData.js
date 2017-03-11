@@ -16,12 +16,12 @@ export default class MarkerData {
     return this._name;
   }
 
-  set thumbnailFilename(filename) {
-    this._thumbnailFilename = filename;
+  set thumbnailPath(path) {
+    this._thumbnailPath = path;
   }
 
-  get thumbnailFilename() {
-    return this._thumbnailFilename;
+  get thumbnailPath() {
+    return this._thumbnailPath;
   }
 
   set latitude(latitude) {

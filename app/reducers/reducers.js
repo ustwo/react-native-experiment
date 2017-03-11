@@ -2,7 +2,8 @@ import {
   RECEIVED_INSTAGRAM_ACCESS_TOKEN,
   FEEDS_HAVE_ERRORED,
   FEEDS_ARE_LOADING,
-  FEEDS_FETCH_SUCCESS
+  FEEDS_FETCH_SUCCESS,
+  UPDATE_THUMBNAIL_PATH
 } from '../actions/actions';
 
 import MarkerFactory from '../models/MarkerFactory'
@@ -40,7 +41,6 @@ export function feedsAreLoading(state = false, action) {
 export function feeds(state = [], action) {
   switch (action.type) {
     case FEEDS_FETCH_SUCCESS:
-      console.log("action url: " + action.url);// + ", with feed: " + JSON.stringify(action.feed)); stringifying the feed causes an error
       // Add the new feed to the existing list of feeds
       var newState = Object.assign([], state);
 
@@ -50,6 +50,24 @@ export function feeds(state = [], action) {
         source: hostname,
         feed: MarkerFactory.build(hostname, action.feed)
       });
+
+      return newState;
+
+    case UPDATE_THUMBNAIL_PATH:
+      var newState = Object.assign([], state);
+
+      for (var i = 0; i < newState.length; i++) {
+        var markers = newState[i]['feed'];
+
+        for (var j = 0; j < markers.length; j++) {
+          var markerData = markers[j];
+
+          if (markerData.name == action.locationName) {
+            markerData.thumbnailPath = action.thumbnailPath;
+            break;
+          }
+        }
+      }
 
       return newState;
 

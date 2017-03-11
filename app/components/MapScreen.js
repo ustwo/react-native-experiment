@@ -9,7 +9,7 @@ import { connect } from 'react-redux';
 import MapView from 'react-native-maps';
 
 import ImageDownloader from '../networking/ImageDownloader';
-import { feedFetchData, feedsFetchSuccess } from '../actions/actions'
+import { feedFetchData, feedsFetchSuccess, updateMarkerThumbnail } from '../actions/actions'
 
 class MapScreen extends Component {
 
@@ -68,8 +68,6 @@ class MapScreen extends Component {
       })
       .then(response => response.json())
       .then(feed => {
-        //console.log("fetching from: " + 'https://api.instagram.com/v1/locations/' + locationId + '/media/recent?access_token=' + this.props.instagramAccessToken)
-
         var data = feed['data'];
         if (data.length > 0) {
           var keys = Object.keys(data);
@@ -81,10 +79,10 @@ class MapScreen extends Component {
 
             // TODO: Check if image exists first, and download if it doesn't
             var imageUrl = instagramPost['images']['standard_resolution']['url'];
-            downloadImage(imageUrl, locationName + '/image');
+            downloadImage(this.props, locationName, imageUrl, 'image');
 
             var thumbnailUrl = instagramPost['images']['thumbnail']['url'];
-            downloadImage(thumbnailUrl, locationName + '/thumbnail');
+            downloadImage(this.props, locationName, thumbnailUrl, 'thumbnail');
           }
         }
       })
@@ -95,21 +93,17 @@ class MapScreen extends Component {
   }
 
   getFeedMarkers() {
-    //console.log('state feeds: ' + JSON.stringify(this.props.feeds));
-    /*this.props.feeds.map(  // Iterate through the master feeds array that contains individual feeds
-      feed => feed.feed.map(      // Iterate through the marker data contained in each individual feed
-        (markerData, i) =>
-          console.log(feed.source + " location name: " + markerData.name)
-      )
-    );*/
-
     return this.props.feeds.map(  // Iterate through the master feeds array that contains individual feeds
       feed => feed.feed.map(      // Iterate through the marker data contained in each individual feed
         (markerData, i) =>
-          // See MarkerData for available feeds (NOTE: Not actually using MarkerData at the moment, but we will)
           <MapView.Marker
             key={i}
             coordinate={{latitude: markerData.latitude, longitude: markerData.longitude}}>
+            { markerData.thumbnailPath &&
+                <Image
+                  source={{uri: 'file:' + markerData.thumbnailPath}}
+                  style={{width: 80, height: 80}} />
+            }
           </MapView.Marker>
       )
     );
@@ -134,7 +128,7 @@ class MapScreen extends Component {
   }
 }
 
-async function downloadImage(imageUrl, prefix) {
+async function downloadImage(props, locationName, imageUrl, prefix) {
   var indexOfLastSlash = imageUrl.lastIndexOf('/');
   var imageBaseUrl = imageUrl.substring(0, indexOfLastSlash + 1);
   var imageFilename = imageUrl.substring(indexOfLastSlash + 1);
@@ -142,7 +136,14 @@ async function downloadImage(imageUrl, prefix) {
   console.log("baseUrl: " + imageBaseUrl + ", imageFilename: " + imageFilename);
 
   // TODO: Check if image exists first, and download if it doesn't
-  ImageDownloader.download(imageBaseUrl, imageFilename, prefix);
+  ImageDownloader.download(
+    imageBaseUrl, imageFilename, locationName + '/' + prefix
+  )
+  .then((res) => {
+    if (prefix.indexOf('thumbnail') > -1) {
+      props.linkThumbnailToMarker(locationName, res.path());
+    }
+  });
 }
 
 const mapStateToProps = (state) => {
@@ -157,7 +158,8 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
   return {
     fetchData: (url) => dispatch(feedFetchData(url)),
-    fetchSuccess: (url, feed) => dispatch(feedsFetchSuccess(url, feed))
+    fetchSuccess: (url, feed) => dispatch(feedsFetchSuccess(url, feed)),
+    linkThumbnailToMarker: (locationName, thumbnailPath) => dispatch(updateMarkerThumbnail(locationName, thumbnailPath))
   };
 };
 
