@@ -3,7 +3,9 @@ import {
   AppRegistry,
   StyleSheet,
   View,
-  Image
+  Image,
+  TouchableHighlight,
+  Text
 } from 'react-native';
 import { connect } from 'react-redux';
 import MapView from 'react-native-maps';
@@ -25,13 +27,15 @@ class MapScreen extends Component {
 
   componentDidMount() {
     // These dispatches, once the async tasks complete, will update the feeds in the local state (triggering a re-render)
-    this.getInstagramLocations('https://api.instagram.com/v1/locations/search?lat=' + this.state.latitude + '&lng=' + this.state.longitude + '&access_token=' + this.props.instagramAccessToken);
-    this.props.fetchData('https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=' + this.state.latitude + ',' + this.state.longitude + '&radius=1400&type=food&key=AIzaSyD-d7MKoxPuq0XvV3BGXMbuBLRIlo1GX4U');
+    //this.getInstagramLocations('https://api.instagram.com/v1/locations/search?lat=' + this.state.latitude + '&lng=' + this.state.longitude + '&access_token=' + this.props.instagramAccessToken);
+    this.props.fetchData('https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=' + this.state.latitude + ',' + this.state.longitude + '&radius=1400&type=restaurant&key=AIzaSyD-d7MKoxPuq0XvV3BGXMbuBLRIlo1GX4U');
   }
 
   getInstagramLocations(url) {
     fetch(url)
     .then((response) => {
+      console.log("RESPONSE: " + JSON.stringify(response));
+
       if (!response.ok) {
         throw Error(response.statusText);
       }
@@ -42,12 +46,14 @@ class MapScreen extends Component {
     .then(feed => {
       var locationIds = [];
 
+      console.log("INSTA LOCATION FEED: " + JSON.stringify(feed));
+
       var data = feed['data'];
       data.map(locationData => {
         locationIds.push(locationData['id']);
       })
 
-      this.getInstagramLocationImages(locationIds);
+      //this.getInstagramLocationImages(locationIds);
 
       this.props.fetchSuccess(url, feed)
     })
@@ -56,7 +62,8 @@ class MapScreen extends Component {
     });
   }
 
-  getInstagramLocationImages(locationIds) {
+  // Avoid this for now... it launches a different Instagram API request for every single nearby location, running us close to the request limit
+  /*getInstagramLocationImages(locationIds) {
     locationIds.map(locationId => {
       fetch('https://api.instagram.com/v1/locations/' + locationId + '/media/recent?access_token=' + this.props.instagramAccessToken)
       .then((response) => {
@@ -90,15 +97,34 @@ class MapScreen extends Component {
         console.log("getInstagramLocationImages CATCH");
       });
     });
-  }
+  }*/
 
   getFeedMarkers() {
+    this.props.feeds.map(  // Iterate through the master feeds array that contains individual feeds
+      feed => feed.feed.map(      // Iterate through the marker data contained in each individual feed
+        (markerData, i) => {
+          if (markerData.thumbnailPath) {
+            console.log("at " + i + " WE HAVE A THUMBNAIL: " + markerData.thumbnailPath);
+          } else {
+            console.log("...no thumbnail...");
+          }
+        }
+      )
+    );
+
     return this.props.feeds.map(  // Iterate through the master feeds array that contains individual feeds
       feed => feed.feed.map(      // Iterate through the marker data contained in each individual feed
         (markerData, i) =>
           <MapView.Marker
             key={i}
-            coordinate={{latitude: markerData.latitude, longitude: markerData.longitude}}>
+            title={markerData.name}
+            coordinate={{latitude: markerData.latitude, longitude: markerData.longitude}}
+            onPress={() => this.onMarkerPress(markerData.name, markerData.latitude, markerData.longitude)}>
+            <MapView.Callout tooltip style={styles.customView}>
+                <View style={styles.calloutText}>
+                  <Text>{markerData.title}</Text>
+                </View>
+            </MapView.Callout>
             { markerData.thumbnailPath &&
                 <Image
                   source={{uri: 'file:' + markerData.thumbnailPath}}
@@ -109,6 +135,10 @@ class MapScreen extends Component {
     );
   }
 
+  onMarkerPress(name, latitude, longitude) {
+    console.log("PRESSED MARKER: " + name + " at " + latitude + ", " + longitude);
+  }
+
   render() {
     return (
       <View style={styles.container}>
@@ -117,8 +147,9 @@ class MapScreen extends Component {
           initialRegion={{
             latitude: this.state.latitude,
             longitude: this.state.longitude,
-            latitudeDelta: 0.0922,
-            longitudeDelta: 0.0421}}
+            latitudeDelta: 0.03,
+            longitudeDelta: 0.03}}
+          moveOnMarkerPress={false}
           showsUserLocation={true}
           showsMyLocationButton={true}>
           {this.getFeedMarkers()}
@@ -132,8 +163,6 @@ async function downloadImage(props, locationName, imageUrl, prefix) {
   var indexOfLastSlash = imageUrl.lastIndexOf('/');
   var imageBaseUrl = imageUrl.substring(0, indexOfLastSlash + 1);
   var imageFilename = imageUrl.substring(indexOfLastSlash + 1);
-
-  console.log("baseUrl: " + imageBaseUrl + ", imageFilename: " + imageFilename);
 
   // TODO: Check if image exists first, and download if it doesn't
   ImageDownloader.download(
