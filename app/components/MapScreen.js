@@ -21,13 +21,15 @@ class MapScreen extends Component {
     this.state = {
       latitude: 40.7503287,
       longitude: -73.9936573,
-      instagramLocations: []
+      instagramLocationIds: new Set(), // TODO: Store in Realm for persistence (less Instagram API requests)?
+      pressedMarker: {
+        name: ''
+      }
     };
   }
 
   componentDidMount() {
     // These dispatches, once the async tasks complete, will update the feeds in the local state (triggering a re-render)
-    //this.getInstagramLocations('https://api.instagram.com/v1/locations/search?lat=' + this.state.latitude + '&lng=' + this.state.longitude + '&access_token=' + this.props.instagramAccessToken);
     this.props.fetchData('https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=' + this.state.latitude + ',' + this.state.longitude + '&radius=1400&type=restaurant&key=AIzaSyD-d7MKoxPuq0XvV3BGXMbuBLRIlo1GX4U');
   }
 
@@ -44,26 +46,28 @@ class MapScreen extends Component {
     })
     .then(response => response.json())
     .then(feed => {
-      var locationIds = [];
-
-      console.log("INSTA LOCATION FEED: " + JSON.stringify(feed));
-
       var data = feed['data'];
       data.map(locationData => {
-        locationIds.push(locationData['id']);
+        if (!this.state.instagramLocationIds.has(locationData['id'])) {
+          this.state.instagramLocationIds.add(locationData['id']);
+
+          // TODO: Need more robust location name matching
+          if (locationData['name'] == this.state.pressedMarker.name) {
+            this.getInstagramLocationImages([locationData['id']]);
+          }
+        }
       })
 
-      //this.getInstagramLocationImages(locationIds);
-
-      this.props.fetchSuccess(url, feed)
+      //this.props.fetchSuccess(url, feed)
     })
     .catch(() => {
       console.log("getInstagramLocations CATCH");
     });
   }
 
-  // Avoid this for now... it launches a different Instagram API request for every single nearby location, running us close to the request limit
-  /*getInstagramLocationImages(locationIds) {
+  // Be sure to call this function only when necessary
+  // so as not to exceed the Instagram API request limit
+  getInstagramLocationImages(locationIds) {
     locationIds.map(locationId => {
       fetch('https://api.instagram.com/v1/locations/' + locationId + '/media/recent?access_token=' + this.props.instagramAccessToken)
       .then((response) => {
@@ -75,6 +79,8 @@ class MapScreen extends Component {
       })
       .then(response => response.json())
       .then(feed => {
+        console.log("getInstagramLocationImages feed: " + JSON.stringify(feed));
+
         var data = feed['data'];
         if (data.length > 0) {
           var keys = Object.keys(data);
@@ -97,21 +103,9 @@ class MapScreen extends Component {
         console.log("getInstagramLocationImages CATCH");
       });
     });
-  }*/
+  }
 
   getFeedMarkers() {
-    this.props.feeds.map(  // Iterate through the master feeds array that contains individual feeds
-      feed => feed.feed.map(      // Iterate through the marker data contained in each individual feed
-        (markerData, i) => {
-          if (markerData.thumbnailPath) {
-            console.log("at " + i + " WE HAVE A THUMBNAIL: " + markerData.thumbnailPath);
-          } else {
-            console.log("...no thumbnail...");
-          }
-        }
-      )
-    );
-
     return this.props.feeds.map(  // Iterate through the master feeds array that contains individual feeds
       feed => feed.feed.map(      // Iterate through the marker data contained in each individual feed
         (markerData, i) =>
@@ -125,11 +119,6 @@ class MapScreen extends Component {
                   <Text>{markerData.name}</Text>
                 </View>
             </MapView.Callout>
-            { markerData.thumbnailPath &&
-                <Image
-                  source={{uri: 'file:' + markerData.thumbnailPath}}
-                  style={{width: 80, height: 80}} />
-            }
           </MapView.Marker>
       )
     );
@@ -137,6 +126,14 @@ class MapScreen extends Component {
 
   onMarkerPress(name, latitude, longitude) {
     console.log("PRESSED MARKER: " + name + " at " + latitude + ", " + longitude);
+
+    // TODO: First check if instagram location is already in current list, if not request nearby insta locations
+    this.getInstagramLocations('https://api.instagram.com/v1/locations/search?lat=' + latitude + '&lng=' + longitude + '&access_token=' + this.props.instagramAccessToken);
+    this.setState({
+      pressedMarker: {
+        name: name
+      }
+    });
   }
 
   render() {
