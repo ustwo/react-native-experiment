@@ -120,9 +120,9 @@ class MapScreen extends Component {
             title={markerData.name}
             coordinate={{latitude: markerData.latitude, longitude: markerData.longitude}}
             onPress={() => this.onMarkerPress(markerData.name, markerData.latitude, markerData.longitude)}>
-            <MapView.Callout tooltip style={styles.customView}>
-                <View style={styles.calloutText}>
-                  <Text>{markerData.title}</Text>
+            <MapView.Callout>
+                <View>
+                  <Text>{markerData.name}</Text>
                 </View>
             </MapView.Callout>
             { markerData.thumbnailPath &&

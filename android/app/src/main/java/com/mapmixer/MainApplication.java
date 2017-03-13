@@ -4,8 +4,8 @@ import android.app.Application;
 import android.util.Log;
 
 import com.facebook.react.ReactApplication;
-import io.realm.react.RealmReactPackage;
 import com.airbnb.android.react.maps.MapsPackage;
+import io.realm.react.RealmReactPackage;
 import com.RNFetchBlob.RNFetchBlobPackage;
 import com.facebook.react.ReactInstanceManager;
 import com.facebook.react.ReactNativeHost;
@@ -28,8 +28,8 @@ public class MainApplication extends Application implements ReactApplication {
     protected List<ReactPackage> getPackages() {
       return Arrays.<ReactPackage>asList(
           new MainReactPackage(),
-            new RealmReactPackage(),
             new MapsPackage(),
+            new RealmReactPackage(),
             new RNFetchBlobPackage()
       );
     }

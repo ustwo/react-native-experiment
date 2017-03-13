@@ -36,7 +36,6 @@
 		5E9157361DD0AC6A00FF2AA8 /* libRCTAnimation.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 5E9157331DD0AC6500FF2AA8 /* libRCTAnimation.a */; };
 		832341BD1AAA6AB300B99B32 /* libRCTText.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 832341B51AAA6A8300B99B32 /* libRCTText.a */; };
 		2D6BD54B5C174CA9BA8B1015 /* libRNFetchBlob.a in Frameworks */ = {isa = PBXBuildFile; fileRef = CBC70C2AF1E64C1FABA6A3CA /* libRNFetchBlob.a */; };
-		E954984C27BD4DB7A5655E7D /* libAirMaps.a in Frameworks */ = {isa = PBXBuildFile; fileRef = AE3678BFEC6C448C906D4F87 /* libAirMaps.a */; };
 		A9D8B9AE15974697AB66FA2F /* libRealmReact.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 3EF84342A77D4D489479D53C /* libRealmReact.a */; };
 		4ABF3B4F2E4943EC83D013C9 /* libc++.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 9C119EE9DECC419F90CE41A6 /* libc++.tbd */; };
 		DF9489A718CE4DF391D0B8B0 /* libz.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 13B83892960B4EFC8647E2ED /* libz.tbd */; };
@@ -74,6 +73,7 @@
 		320E6D59273443FAB95EB98C /* Skia.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 12ACBA86E07C4F38B3324883 /* Skia.ttf */; };
 		4B6A25C6F4B14445AA4293B5 /* Times New Roman.ttf in Resources */ = {isa = PBXBuildFile; fileRef = F312A9390CB8408DA2E1459F /* Times New Roman.ttf */; };
 		54C6108A434D40BE9E5DC7CA /* Zocial.ttf in Resources */ = {isa = PBXBuildFile; fileRef = B27D3CBC51F9401E84AD96F5 /* Zocial.ttf */; };
+		BBDBFD19B3B14066B18055E3 /* libAirMaps.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 5FB91AF1BBAA455BA1707FE2 /* libAirMaps.a */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -295,8 +295,6 @@
 		832341B01AAA6A8300B99B32 /* RCTText.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTText.xcodeproj; path = "../node_modules/react-native/Libraries/Text/RCTText.xcodeproj"; sourceTree = "<group>"; };
 		6F43BABCEF064B8AB29DF18D /* RNFetchBlob.xcodeproj */ = {isa = PBXFileReference; name = "RNFetchBlob.xcodeproj"; path = "../node_modules/react-native-fetch-blob/ios/RNFetchBlob.xcodeproj"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = wrapper.pb-project; explicitFileType = undefined; includeInIndex = 0; };
 		CBC70C2AF1E64C1FABA6A3CA /* libRNFetchBlob.a */ = {isa = PBXFileReference; name = "libRNFetchBlob.a"; path = "libRNFetchBlob.a"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = archive.ar; explicitFileType = undefined; includeInIndex = 0; };
-		7C81CEAC8DC041FAB7FA15A0 /* AirMaps.xcodeproj */ = {isa = PBXFileReference; name = "AirMaps.xcodeproj"; path = "../node_modules/react-native-maps/ios/AirMaps.xcodeproj"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = wrapper.pb-project; explicitFileType = undefined; includeInIndex = 0; };
-		AE3678BFEC6C448C906D4F87 /* libAirMaps.a */ = {isa = PBXFileReference; name = "libAirMaps.a"; path = "libAirMaps.a"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = archive.ar; explicitFileType = undefined; includeInIndex = 0; };
 		94D5402E6172413C87E9110F /* RealmReact.xcodeproj */ = {isa = PBXFileReference; name = "RealmReact.xcodeproj"; path = "../node_modules/realm/react-native/ios/RealmReact.xcodeproj"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = wrapper.pb-project; explicitFileType = undefined; includeInIndex = 0; };
 		3EF84342A77D4D489479D53C /* libRealmReact.a */ = {isa = PBXFileReference; name = "libRealmReact.a"; path = "libRealmReact.a"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = archive.ar; explicitFileType = undefined; includeInIndex = 0; };
 		9C119EE9DECC419F90CE41A6 /* libc++.tbd */ = {isa = PBXFileReference; name = "libc++.tbd"; path = "usr/lib/libc++.tbd"; sourceTree = SDKROOT; fileEncoding = undefined; lastKnownFileType = sourcecode.text-based-dylib-definition; explicitFileType = undefined; includeInIndex = 0; };
@@ -335,6 +333,8 @@
 		12ACBA86E07C4F38B3324883 /* Skia.ttf */ = {isa = PBXFileReference; name = "Skia.ttf"; path = "../node_modules/native-base/Fonts/Skia.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
 		F312A9390CB8408DA2E1459F /* Times New Roman.ttf */ = {isa = PBXFileReference; name = "Times New Roman.ttf"; path = "../node_modules/native-base/Fonts/Times New Roman.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
 		B27D3CBC51F9401E84AD96F5 /* Zocial.ttf */ = {isa = PBXFileReference; name = "Zocial.ttf"; path = "../node_modules/native-base/Fonts/Zocial.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		CFB85205BFC14F53983B8E18 /* AirMaps.xcodeproj */ = {isa = PBXFileReference; name = "AirMaps.xcodeproj"; path = "../node_modules/react-native-maps/ios/AirMaps.xcodeproj"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = wrapper.pb-project; explicitFileType = undefined; includeInIndex = 0; };
+		5FB91AF1BBAA455BA1707FE2 /* libAirMaps.a */ = {isa = PBXFileReference; name = "libAirMaps.a"; path = "libAirMaps.a"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = archive.ar; explicitFileType = undefined; includeInIndex = 0; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -362,10 +362,10 @@
 				00C302EA1ABCBA2D00DB3ED1 /* libRCTVibration.a in Frameworks */,
 				139FDEF61B0652A700C62182 /* libRCTWebSocket.a in Frameworks */,
 				2D6BD54B5C174CA9BA8B1015 /* libRNFetchBlob.a in Frameworks */,
-				E954984C27BD4DB7A5655E7D /* libAirMaps.a in Frameworks */,
 				A9D8B9AE15974697AB66FA2F /* libRealmReact.a in Frameworks */,
 				4ABF3B4F2E4943EC83D013C9 /* libc++.tbd in Frameworks */,
 				DF9489A718CE4DF391D0B8B0 /* libz.tbd in Frameworks */,
+				BBDBFD19B3B14066B18055E3 /* libAirMaps.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -533,8 +533,8 @@
 				00C302DF1ABCB9EE00DB3ED1 /* RCTVibration.xcodeproj */,
 				139FDEE61B06529A00C62182 /* RCTWebSocket.xcodeproj */,
 				6F43BABCEF064B8AB29DF18D /* RNFetchBlob.xcodeproj */,
-				7C81CEAC8DC041FAB7FA15A0 /* AirMaps.xcodeproj */,
 				94D5402E6172413C87E9110F /* RealmReact.xcodeproj */,
+				CFB85205BFC14F53983B8E18 /* AirMaps.xcodeproj */,
 			);
 			name = Libraries;
 			sourceTree = "<group>";
@@ -1151,8 +1151,10 @@
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
-					"\"$(SRCROOT)/$(TARGET_NAME)\"",
-					"\"$(SRCROOT)/$(TARGET_NAME)\"",
+				);
+				HEADER_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(SRCROOT)/../node_modules/react-native-maps/ios/**",
 				);
 			};
 			name = Debug;
@@ -1174,8 +1176,10 @@
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
-					"\"$(SRCROOT)/$(TARGET_NAME)\"",
-					"\"$(SRCROOT)/$(TARGET_NAME)\"",
+				);
+				HEADER_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(SRCROOT)/../node_modules/react-native-maps/ios/**",
 				);
 			};
 			name = Release;
@@ -1195,6 +1199,10 @@
 				);
 				PRODUCT_NAME = MapMixer;
 				VERSIONING_SYSTEM = "apple-generic";
+				HEADER_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(SRCROOT)/../node_modules/react-native-maps/ios/**",
+				);
 			};
 			name = Debug;
 		};
@@ -1212,6 +1220,10 @@
 				);
 				PRODUCT_NAME = MapMixer;
 				VERSIONING_SYSTEM = "apple-generic";
+				HEADER_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(SRCROOT)/../node_modules/react-native-maps/ios/**",
+				);
 			};
 			name = Release;
 		};
@@ -1241,8 +1253,10 @@
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
-					"\"$(SRCROOT)/$(TARGET_NAME)\"",
-					"\"$(SRCROOT)/$(TARGET_NAME)\"",
+				);
+				HEADER_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(SRCROOT)/../node_modules/react-native-maps/ios/**",
 				);
 			};
 			name = Debug;
@@ -1273,8 +1287,10 @@
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
-					"\"$(SRCROOT)/$(TARGET_NAME)\"",
-					"\"$(SRCROOT)/$(TARGET_NAME)\"",
+				);
+				HEADER_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(SRCROOT)/../node_modules/react-native-maps/ios/**",
 				);
 			};
 			name = Release;
@@ -1300,8 +1316,6 @@
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
-					"\"$(SRCROOT)/$(TARGET_NAME)\"",
-					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 				);
 			};
 			name = Debug;
@@ -1326,8 +1340,6 @@
 				TVOS_DEPLOYMENT_TARGET = 10.1;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
-					"\"$(SRCROOT)/$(TARGET_NAME)\"",
-					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 				);
 			};

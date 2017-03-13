@@ -10,7 +10,7 @@
     "lodash": "^4.17.4",
     "native-base": "^2.0.12",
     "react": "~15.4.0",
-    "react-native": "0.41.2",
+    "react-native": "^0.42.0",
     "react-native-fetch-blob": "^0.10.2",
     "react-native-maps": "^0.13.0",
     "react-redux": "^5.0.3",
