@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import {
   AppRegistry,
   StyleSheet,
+  Dimensions,
   View,
   Image,
   TouchableHighlight,
@@ -9,9 +10,13 @@ import {
 } from 'react-native';
 import { connect } from 'react-redux';
 import MapView from 'react-native-maps';
+import RNFetchBlob from 'react-native-fetch-blob';
 
+import Constants from '../config/Constants';
 import ImageDownloader from '../networking/ImageDownloader';
-import { feedFetchData, feedsFetchSuccess, updateMarkerThumbnail } from '../actions/actions'
+import { feedFetchData, feedsFetchSuccess, updateMarkerThumbnail, addItemChannelTwo } from '../actions/actions'
+
+const screen = Dimensions.get('window');
 
 class MapScreen extends Component {
 
@@ -24,7 +29,8 @@ class MapScreen extends Component {
       instagramLocationIds: new Set(), // TODO: Store in Realm for persistence (less Instagram API requests)?
       pressedMarker: {
         name: ''
-      }
+      },
+      channelTwoPreviews: []
     };
   }
 
@@ -92,7 +98,7 @@ class MapScreen extends Component {
 
             // TODO: Check if image exists first, and download if it doesn't
             var imageUrl = instagramPost['images']['standard_resolution']['url'];
-            downloadImage(this.props, locationName, imageUrl, 'image');
+            //downloadImage(this.props, locationName, imageUrl, 'image');
 
             var thumbnailUrl = instagramPost['images']['thumbnail']['url'];
             downloadImage(this.props, locationName, thumbnailUrl, 'thumbnail');
@@ -136,6 +142,34 @@ class MapScreen extends Component {
     });
   }
 
+  /*updateChannelTwoPreviews() {
+    if (this.state.pressedMarker.name && RNFetchBlob.fs.isDir(Constants.CACHED_IMAGES_DIR + this.state.pressedMarker.name)) {
+      RNFetchBlob.fs.ls(Constants.CACHED_IMAGES_DIR + this.state.pressedMarker.name)
+      .then((files) => {
+        var thumbnails = [];
+
+        files.map((file) => {
+          if (file.indexOf("thumbnail-") > -1) {
+            thumbnails.push(Constants.CACHED_IMAGES_DIR + this.state.pressedMarker.name + "/" + file);
+          }
+        });
+
+        this.setState({
+          channelTwoPreviews: thumbnails
+        });
+      });
+    }
+  }*/
+
+  getChannelTwoPreviews() {
+    return this.props.channelTwo.map((thumbnailPath, i) =>
+      <Image
+        key={i}
+        source={{uri: 'file:' + Constants.CACHED_IMAGES_DIR + thumbnailPath}}
+        style={{width: 80, height: 80}} />
+    );
+  }
+
   render() {
     return (
       <View style={styles.container}>
@@ -151,6 +185,12 @@ class MapScreen extends Component {
           showsMyLocationButton={true}>
           {this.getFeedMarkers()}
         </MapView>
+        {
+          (this.props.channelTwo.length > 0) &&
+          <View style={styles.channelTwoContainer}>
+            {this.getChannelTwoPreviews()}
+          </View>
+        }
       </View>
     );
   }
@@ -167,7 +207,8 @@ async function downloadImage(props, locationName, imageUrl, prefix) {
   )
   .then((res) => {
     if (prefix.indexOf('thumbnail') > -1) {
-      props.linkThumbnailToMarker(locationName, res.path());
+      //props.linkThumbnailToMarker(locationName, res.path());
+      props.addItemChannelTwo(locationName + '/thumbnail-' + imageFilename);
     }
   });
 }
@@ -177,7 +218,8 @@ const mapStateToProps = (state) => {
     instagramAccessToken: state.receivedInstagramAccessToken,
     feeds: state.feeds,
     haveErrored: state.feedsHaveErrored,
-    areLoading: state.feedsAreLoading
+    areLoading: state.feedsAreLoading,
+    channelTwo: state.channelTwo
   };
 };
 
@@ -185,7 +227,8 @@ const mapDispatchToProps = (dispatch) => {
   return {
     fetchData: (url) => dispatch(feedFetchData(url)),
     fetchSuccess: (url, feed) => dispatch(feedsFetchSuccess(url, feed)),
-    linkThumbnailToMarker: (locationName, thumbnailPath) => dispatch(updateMarkerThumbnail(locationName, thumbnailPath))
+    linkThumbnailToMarker: (locationName, thumbnailPath) => dispatch(updateMarkerThumbnail(locationName, thumbnailPath)),
+    addItemChannelTwo: (image) => dispatch(addItemChannelTwo(image))
   };
 };
 
@@ -193,10 +236,7 @@ export default connect(mapStateToProps, mapDispatchToProps)(MapScreen);
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#F5FCFF',
+    ...StyleSheet.absoluteFillObject
   },
   map: {
     position: 'absolute',
@@ -204,5 +244,16 @@ const styles = StyleSheet.create({
     left: 0,
     right: 0,
     bottom: 0
+  },
+  channelTwoContainer: {
+    position: 'absolute',
+    backgroundColor: 'red',
+    flexDirection: 'row',
+    left: 20,
+    bottom: 0,
+    width: screen.width - 40,
+    height: 150,
+    paddingHorizontal: 20,
+    paddingTop: 20
   }
 });

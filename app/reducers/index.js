@@ -3,12 +3,14 @@ import {
   receivedInstagramAccessToken,
   feeds,
   feedsHaveErrored,
-  feedsAreLoading
+  feedsAreLoading,
+  channelTwo
 } from './reducers';
 
 export default combineReducers({
   receivedInstagramAccessToken,
   feeds,
   feedsHaveErrored,
-  feedsAreLoading
+  feedsAreLoading,
+  channelTwo
 });

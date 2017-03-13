@@ -6,7 +6,8 @@ const initialState = {
   receivedInstagramAccessToken: '',
   feeds: [],
   feedsHaveErrored: false,
-  feedsAreLoading: false
+  feedsAreLoading: false,
+  channelTwo: []  // TODO: Replace existing scheme with this 2-channel setup
 }
 
 export default function configureStore() {

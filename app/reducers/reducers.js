@@ -3,7 +3,8 @@ import {
   FEEDS_HAVE_ERRORED,
   FEEDS_ARE_LOADING,
   FEEDS_FETCH_SUCCESS,
-  UPDATE_THUMBNAIL_PATH
+  UPDATE_THUMBNAIL_PATH,
+  ADD_ITEM_CHANNEL_TWO
 } from '../actions/actions';
 
 import MarkerFactory from '../models/MarkerFactory'
@@ -68,6 +69,24 @@ export function feeds(state = [], action) {
           }
         }
       }
+
+      return newState;
+
+    default:
+      return state;
+  }
+}
+
+export function channelTwo(state = [], action) {
+  switch (action.type) {
+    case ADD_ITEM_CHANNEL_TWO:
+      var newState = Object.assign([], state);
+
+      // TODO: Use a Set instead of an array to avoid duplicates
+      /*if (!newState.has(action.image)) {
+        newState.add(action.image);
+      }*/
+      newState.push(action.image);
 
       return newState;
 
