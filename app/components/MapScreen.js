@@ -171,7 +171,7 @@ class MapScreen extends Component {
     <Image
       key={i}
       source={{uri: 'file:' + Constants.CACHED_IMAGES_DIR + thumbnailPath}}
-      style={{width: 80, height: 80}} />
+      style={styles.channelTwoItem} />
 
   render() {
     return (
