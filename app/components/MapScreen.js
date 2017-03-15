@@ -5,8 +5,9 @@ import {
   Dimensions,
   View,
   Image,
+  Text,
   TouchableHighlight,
-  Text
+  Animated
 } from 'react-native';
 import { connect } from 'react-redux';
 import MapView from 'react-native-maps';
@@ -17,6 +18,8 @@ import ImageDownloader from '../networking/ImageDownloader';
 import { feedFetchData, feedsFetchSuccess, updateMarkerThumbnail, addItemChannelTwo } from '../actions/actions'
 
 const screen = Dimensions.get('window');
+
+var isChannelTwoExpanded = false;
 
 class MapScreen extends Component {
 
@@ -30,7 +33,7 @@ class MapScreen extends Component {
       pressedMarker: {
         name: ''
       },
-      channelTwoPreviews: []
+      bounceValue: new Animated.Value(0)  // Initial position of Channel Two container
     };
   }
 
@@ -153,6 +156,27 @@ class MapScreen extends Component {
     );
   }
 
+  toggleChannelTwo() {
+    console.log("TOGGLE CHANNEL TWO");
+
+    var toValue = (screen.height - 250) * -1;
+    if (isChannelTwoExpanded) {
+      toValue = 0;
+    }
+
+    Animated.spring(
+      this.state.bounceValue,
+      {
+        toValue: toValue,
+        velocity: 3,
+        tension: 2,
+        friction: 8
+      }
+    ).start();
+
+    isChannelTwoExpanded = !isChannelTwoExpanded;
+  }
+
   render() {
     return (
       <View style={styles.container}>
@@ -170,9 +194,12 @@ class MapScreen extends Component {
         </MapView>
         {
           (this.props.channelTwo.length > 0) &&
-          <View style={styles.channelTwoContainer}>
-            {this.getChannelTwoPreviews()}
-          </View>
+          <TouchableHighlight onPress={() => {this.toggleChannelTwo()}}>
+            <Animated.View style={[styles.channelTwoContainer,
+              {transform: [{translateY: this.state.bounceValue}]}]}>
+              {this.getChannelTwoPreviews()}
+            </Animated.View>
+          </TouchableHighlight>
         }
       </View>
     );
@@ -233,10 +260,10 @@ const styles = StyleSheet.create({
     backgroundColor: 'red',
     flexDirection: 'row',
     left: 20,
-    bottom: 0,
+    top: screen.height - 150,
     width: screen.width - 40,
-    height: 150,
+    height: screen.height - 100,
     paddingHorizontal: 20,
-    paddingTop: 20
+    paddingTop: 40
   }
 });
