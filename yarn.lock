@@ -952,7 +952,7 @@ center-align@^0.1.1:
     align-text "^0.1.3"
     lazy-cache "^1.0.3"
 
-chalk@1.1.1, chalk@^1.1.0, chalk@^1.1.1:
+chalk@1.1.1, chalk@^1.0.0, chalk@^1.1.0, chalk@^1.1.1:
   version "1.1.1"
   resolved "https://registry.yarnpkg.com/chalk/-/chalk-1.1.1.tgz#509afb67066e7499f7eb3535c77445772ae2d019"
   dependencies:
@@ -962,7 +962,7 @@ chalk@1.1.1, chalk@^1.1.0, chalk@^1.1.1:
     strip-ansi "^3.0.0"
     supports-color "^2.0.0"
 
-chalk@^1.0.0, chalk@^1.1.3:
+chalk@^1.1.3:
   version "1.1.3"
   resolved "https://registry.yarnpkg.com/chalk/-/chalk-1.1.3.tgz#a8115c55e4a702fe4d150abd3872822a7e09fc98"
   dependencies:
@@ -2647,13 +2647,13 @@ mime-db@~1.23.0:
   version "1.23.0"
   resolved "https://registry.yarnpkg.com/mime-db/-/mime-db-1.23.0.tgz#a31b4070adaea27d732ea333740a64d0ec9a6659"
 
-mime-types@2.1.11, mime-types@~2.1.7:
+mime-types@2.1.11, mime-types@~2.1.7, mime-types@~2.1.9:
   version "2.1.11"
   resolved "https://registry.yarnpkg.com/mime-types/-/mime-types-2.1.11.tgz#c259c471bda808a85d6cd193b430a5fae4473b3c"
   dependencies:
     mime-db "~1.23.0"
 
-mime-types@^2.1.12, mime-types@~2.1.11, mime-types@~2.1.13, mime-types@~2.1.6, mime-types@~2.1.9:
+mime-types@^2.1.12, mime-types@~2.1.11, mime-types@~2.1.13, mime-types@~2.1.6:
   version "2.1.14"
   resolved "https://registry.yarnpkg.com/mime-types/-/mime-types-2.1.14.tgz#f7ef7d97583fcaf3b7d282b6f8b5679dab1e94ee"
   dependencies:
@@ -3163,15 +3163,19 @@ react-native-fetch-blob@^0.10.2:
     base-64 "0.1.0"
     glob "^7.0.6"
 
+react-native-grid-component@^1.0.4:
+  version "1.0.4"
+  resolved "https://registry.yarnpkg.com/react-native-grid-component/-/react-native-grid-component-1.0.4.tgz#1a14b21103b96adc110b5ec0e754615cfafdd855"
+
 react-native-keyboard-aware-scroll-view@0.2.7:
   version "0.2.7"
   resolved "https://registry.yarnpkg.com/react-native-keyboard-aware-scroll-view/-/react-native-keyboard-aware-scroll-view-0.2.7.tgz#dd344cec25284b6314f1cc9d1b75ba267483c6b6"
   dependencies:
     react-timer-mixin "^0.13.3"
 
-react-native-maps@^0.12.4:
-  version "0.12.4"
-  resolved "https://registry.yarnpkg.com/react-native-maps/-/react-native-maps-0.12.4.tgz#2bc115d39cad542d66c241bc0cba4dddd87e44f7"
+react-native-maps@^0.13.0:
+  version "0.13.0"
+  resolved "https://registry.yarnpkg.com/react-native-maps/-/react-native-maps-0.13.0.tgz#f3d791a06d36d553bcc177514ee52fdea45474c0"
 
 react-native-scrollable-tab-view@^0.7.1:
   version "0.7.2"

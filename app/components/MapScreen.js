@@ -12,6 +12,7 @@ import {
 import { connect } from 'react-redux';
 import MapView from 'react-native-maps';
 import RNFetchBlob from 'react-native-fetch-blob';
+import Grid from 'react-native-grid-component'
 
 import Constants from '../config/Constants';
 import ImageDownloader from '../networking/ImageDownloader';
@@ -147,18 +148,7 @@ class MapScreen extends Component {
     });
   }
 
-  getChannelTwoPreviews() {
-    return this.props.channelTwo.map((thumbnailPath, i) =>
-      <Image
-        key={i}
-        source={{uri: 'file:' + Constants.CACHED_IMAGES_DIR + thumbnailPath}}
-        style={{width: 80, height: 80}} />
-    );
-  }
-
   toggleChannelTwo() {
-    console.log("TOGGLE CHANNEL TWO");
-
     var toValue = (screen.height - 250) * -1;
     if (isChannelTwoExpanded) {
       toValue = 0;
@@ -176,6 +166,12 @@ class MapScreen extends Component {
 
     isChannelTwoExpanded = !isChannelTwoExpanded;
   }
+
+  renderItem = (thumbnailPath, i) =>
+    <Image
+      key={i}
+      source={{uri: 'file:' + Constants.CACHED_IMAGES_DIR + thumbnailPath}}
+      style={{width: 80, height: 80}} />
 
   render() {
     return (
@@ -197,7 +193,12 @@ class MapScreen extends Component {
           <TouchableHighlight onPress={() => {this.toggleChannelTwo()}}>
             <Animated.View style={[styles.channelTwoContainer,
               {transform: [{translateY: this.state.bounceValue}]}]}>
-              {this.getChannelTwoPreviews()}
+              <Grid
+                style={styles.channelTwoList}
+                renderItem={this.renderItem}
+                data={this.props.channelTwo}
+                itemsPerRow={3}
+              />
             </Animated.View>
           </TouchableHighlight>
         }
@@ -205,6 +206,10 @@ class MapScreen extends Component {
     );
   }
 }
+
+/*
+ * Asynchronous threads
+ */
 
 async function downloadImage(props, locationName, imageUrl, prefix) {
   var indexOfLastSlash = imageUrl.lastIndexOf('/');
@@ -222,6 +227,10 @@ async function downloadImage(props, locationName, imageUrl, prefix) {
     }
   });
 }
+
+/*
+ * Redux methods
+ */
 
 const mapStateToProps = (state) => {
   return {
@@ -244,6 +253,10 @@ const mapDispatchToProps = (dispatch) => {
 
 export default connect(mapStateToProps, mapDispatchToProps)(MapScreen);
 
+/*
+ * Styles
+ */
+
 const styles = StyleSheet.create({
   container: {
     ...StyleSheet.absoluteFillObject
@@ -258,12 +271,19 @@ const styles = StyleSheet.create({
   channelTwoContainer: {
     position: 'absolute',
     backgroundColor: 'red',
-    flexDirection: 'row',
     left: 20,
     top: screen.height - 150,
     width: screen.width - 40,
     height: screen.height - 100,
     paddingHorizontal: 20,
     paddingTop: 40
+  },
+  channelTwoList: {
+    flex: 1
+  },
+  channelTwoItem: {
+    flex: 1,
+    height: 80,
+    margin: 1
   }
 });
