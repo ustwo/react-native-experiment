@@ -1,10 +1,12 @@
 import {
   RECEIVED_INSTAGRAM_ACCESS_TOKEN,
-  FEEDS_HAVE_ERRORED,
-  FEEDS_ARE_LOADING,
-  FEEDS_FETCH_SUCCESS,
-  UPDATE_THUMBNAIL_PATH,
-  ADD_ITEM_CHANNEL_TWO
+  CHANNEL_ONE_FEEDS_HAVE_ERRORED,
+  CHANNEL_ONE_FEEDS_ARE_LOADING,
+  CHANNEL_ONE_FEEDS_FETCH_SUCCESS,
+  CHANNEL_TWO_ADD_ITEM
+
+  // Not currently used
+  //UPDATE_THUMBNAIL_PATH
 } from '../actions/actions';
 
 import MarkerFactory from '../models/MarkerFactory'
@@ -19,9 +21,9 @@ export function receivedInstagramAccessToken(state = '', action) {
   }
 }
 
-export function feedsHaveErrored(state = false, action) {
+export function channelOneFeedsHaveErrored(state = false, action) {
   switch (action.type) {
-    case FEEDS_HAVE_ERRORED:
+    case CHANNEL_ONE_FEEDS_HAVE_ERRORED:
       return action.haveErrored;
 
     default:
@@ -29,9 +31,9 @@ export function feedsHaveErrored(state = false, action) {
   }
 }
 
-export function feedsAreLoading(state = false, action) {
+export function channelOneFeedsAreLoading(state = false, action) {
   switch (action.type) {
-    case FEEDS_ARE_LOADING:
+    case CHANNEL_ONE_FEEDS_ARE_LOADING:
       return action.areLoading;
 
     default:
@@ -39,9 +41,9 @@ export function feedsAreLoading(state = false, action) {
   }
 }
 
-export function feeds(state = [], action) {
+export function channelOneFeeds(state = [], action) {
   switch (action.type) {
-    case FEEDS_FETCH_SUCCESS:
+    case CHANNEL_ONE_FEEDS_FETCH_SUCCESS:
       // Add the new feed to the existing list of feeds
       var newState = Object.assign([], state);
 
@@ -54,7 +56,8 @@ export function feeds(state = [], action) {
 
       return newState;
 
-    case UPDATE_THUMBNAIL_PATH:
+    // Not currently used
+    /*case UPDATE_THUMBNAIL_PATH:
       var newState = Object.assign([], state);
 
       for (var i = 0; i < newState.length; i++) {
@@ -70,7 +73,7 @@ export function feeds(state = [], action) {
         }
       }
 
-      return newState;
+      return newState;*/
 
     default:
       return state;
@@ -79,7 +82,7 @@ export function feeds(state = [], action) {
 
 export function channelTwo(state = [], action) {
   switch (action.type) {
-    case ADD_ITEM_CHANNEL_TWO:
+    case CHANNEL_TWO_ADD_ITEM:
       var newState = Object.assign([], state);
 
       // TODO: Use a Set instead of an array to avoid duplicates

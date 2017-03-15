@@ -16,7 +16,7 @@ import Grid from 'react-native-grid-component'
 
 import Constants from '../config/Constants';
 import ImageDownloader from '../networking/ImageDownloader';
-import { feedFetchData, feedsFetchSuccess, updateMarkerThumbnail, addItemChannelTwo } from '../actions/actions'
+import { channelOneFetchFeed, channelOneFeedsFetchSuccess, channelTwoAddItem } from '../actions/actions'
 
 const screen = Dimensions.get('window');
 
@@ -40,8 +40,13 @@ class MapScreen extends Component {
 
   componentDidMount() {
     // These dispatches, once the async tasks complete, will update the feeds in the local state (triggering a re-render)
-    this.props.fetchData('https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=' + this.state.latitude + ',' + this.state.longitude + '&radius=1400&type=restaurant&key=AIzaSyD-d7MKoxPuq0XvV3BGXMbuBLRIlo1GX4U');
+    this.props.channelOneFetchFeed('https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=' + this.state.latitude + ',' + this.state.longitude + '&radius=1400&type=restaurant&key=AIzaSyD-d7MKoxPuq0XvV3BGXMbuBLRIlo1GX4U');
   }
+
+  /*
+   * Channel Two API Requests.
+   * These functions rely on data being available in Channel One.
+   */
 
   getInstagramLocations(url) {
     fetch(url)
@@ -68,7 +73,7 @@ class MapScreen extends Component {
         }
       })
 
-      //this.props.fetchSuccess(url, feed)
+      //this.props.channelOneFetchSuccess(url, feed)
     })
     .catch(() => {
       console.log("getInstagramLocations CATCH");
@@ -76,7 +81,8 @@ class MapScreen extends Component {
   }
 
   // Be sure to call this function only when necessary
-  // so as not to exceed the Instagram API request limit
+  // so as not to exceed the Instagram API request limit.
+  // Will dispatch Redux actions upon success and available data.
   getInstagramLocationImages(locationIds) {
     locationIds.map(locationId => {
       fetch('https://api.instagram.com/v1/locations/' + locationId + '/media/recent?access_token=' + this.props.instagramAccessToken)
@@ -115,9 +121,14 @@ class MapScreen extends Component {
     });
   }
 
+  /*
+   * Render helper functions
+   */
+
+  // May be called upon re-render caused by a Redux state change.
   getFeedMarkers() {
-    return this.props.feeds.map(  // Iterate through the master feeds array that contains individual feeds
-      feed => feed.feed.map(      // Iterate through the marker data contained in each individual feed
+    return this.props.channelOneFeeds.map(  // Iterate through the master channel one feeds array that contains individual feeds
+      feed => feed.feed.map(                // Iterate through the marker data contained in each individual feed
         (markerData, i) =>
           <MapView.Marker
             key={i}
@@ -148,6 +159,8 @@ class MapScreen extends Component {
     });
   }
 
+  // Expands or contracts Channel Two.
+  // May be called upon re-render caused by a Redux state change.
   toggleChannelTwo() {
     var toValue = (screen.height - 250) * -1;
     if (isChannelTwoExpanded) {
@@ -167,7 +180,7 @@ class MapScreen extends Component {
     isChannelTwoExpanded = !isChannelTwoExpanded;
   }
 
-  renderItem = (thumbnailPath, i) =>
+  renderChannelTwoItem = (thumbnailPath, i) =>
     <Image
       key={i}
       source={{uri: 'file:' + Constants.CACHED_IMAGES_DIR + thumbnailPath}}
@@ -195,7 +208,7 @@ class MapScreen extends Component {
               {transform: [{translateY: this.state.bounceValue}]}]}>
               <Grid
                 style={styles.channelTwoList}
-                renderItem={this.renderItem}
+                renderItem={this.renderChannelTwoItem}
                 data={this.props.channelTwo}
                 itemsPerRow={3}
               />
@@ -222,8 +235,10 @@ async function downloadImage(props, locationName, imageUrl, prefix) {
   )
   .then((res) => {
     if (prefix.indexOf('thumbnail') > -1) {
+      props.channelTwoAddItem(locationName + '/thumbnail-' + imageFilename);
+
+      // Not currently used
       //props.linkThumbnailToMarker(locationName, res.path());
-      props.addItemChannelTwo(locationName + '/thumbnail-' + imageFilename);
     }
   });
 }
@@ -235,19 +250,21 @@ async function downloadImage(props, locationName, imageUrl, prefix) {
 const mapStateToProps = (state) => {
   return {
     instagramAccessToken: state.receivedInstagramAccessToken,
-    feeds: state.feeds,
-    haveErrored: state.feedsHaveErrored,
-    areLoading: state.feedsAreLoading,
+    channelOneFeeds: state.channelOneFeeds,
+    channelOneFeedsHaveErrored: state.channelOneFeedsHaveErrored,
+    channelOneFeedsAreLoading: state.channelOneFeedsAreLoading,
     channelTwo: state.channelTwo
   };
 };
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    fetchData: (url) => dispatch(feedFetchData(url)),
-    fetchSuccess: (url, feed) => dispatch(feedsFetchSuccess(url, feed)),
-    linkThumbnailToMarker: (locationName, thumbnailPath) => dispatch(updateMarkerThumbnail(locationName, thumbnailPath)),
-    addItemChannelTwo: (image) => dispatch(addItemChannelTwo(image))
+    channelOneFetchFeed: (url) => dispatch(channelOneFetchFeed(url)),
+    channelOneFetchSuccess: (url, feed) => dispatch(channelOneFeedsFetchSuccess(url, feed)),
+    channelTwoAddItem: (image) => dispatch(channelTwoAddItem(image))
+
+    // Not currently used
+    //linkThumbnailToMarker: (locationName, thumbnailPath) => dispatch(updateMarkerThumbnail(locationName, thumbnailPath))
   };
 };
 

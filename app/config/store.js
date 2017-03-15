@@ -4,10 +4,10 @@ import rootReducer from '../reducers'
 
 const initialState = {
   receivedInstagramAccessToken: '',
-  feeds: [],
-  feedsHaveErrored: false,
-  feedsAreLoading: false,
-  channelTwo: []  // TODO: Replace existing scheme with this 2-channel setup
+  channelOneFeeds: [],
+  channelOneFeedsHaveErrored: false,
+  channelOneFeedsAreLoading: false,
+  channelTwo: []  // TODO: Use a Set instead of an array to avoid duplicates
 }
 
 export default function configureStore() {

@@ -1,16 +1,16 @@
 import { combineReducers } from 'redux';
 import {
   receivedInstagramAccessToken,
-  feeds,
-  feedsHaveErrored,
-  feedsAreLoading,
+  channelOneFeedsHaveErrored,
+  channelOneFeedsAreLoading,
+  channelOneFeeds,
   channelTwo
 } from './reducers';
 
 export default combineReducers({
   receivedInstagramAccessToken,
-  feeds,
-  feedsHaveErrored,
-  feedsAreLoading,
+  channelOneFeedsHaveErrored,
+  channelOneFeedsAreLoading,
+  channelOneFeeds,
   channelTwo
 });

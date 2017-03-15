@@ -5,7 +5,6 @@ import Constants from '../config/Constants';
 module.exports = {
   download: function(baseUrl, filename, prefix) {
     return RNFetchBlob.config({
-      // TODO: Change path based on feed source and other parameters (e.g. username)
       path: Constants.CACHED_IMAGES_DIR + prefix + '-' + filename
     })
     .fetch('GET', baseUrl + filename, {

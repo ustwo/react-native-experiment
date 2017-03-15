@@ -3,11 +3,13 @@
 */
 
 export const RECEIVED_INSTAGRAM_ACCESS_TOKEN = 'RECEIVED_INSTAGRAM_ACCESS_TOKEN'
-export const FEEDS_HAVE_ERRORED = 'FEEDS_HAVE_ERRORED'
-export const FEEDS_ARE_LOADING = 'FEEDS_ARE_LOADING'
-export const FEEDS_FETCH_SUCCESS = 'FEEDS_FETCH_SUCCESS'
-export const UPDATE_THUMBNAIL_PATH = 'UPDATE_THUMBNAIL_PATH'  // TODO: Remove
-export const ADD_ITEM_CHANNEL_TWO = 'ADD_ITEM_CHANNEL_TWO'
+export const CHANNEL_ONE_FEEDS_HAVE_ERRORED = 'CHANNEL_ONE_FEEDS_HAVE_ERRORED'
+export const CHANNEL_ONE_FEEDS_ARE_LOADING = 'CHANNEL_ONE_FEEDS_ARE_LOADING'
+export const CHANNEL_ONE_FEEDS_FETCH_SUCCESS = 'CHANNEL_ONE_FEEDS_FETCH_SUCCESS'
+export const CHANNEL_TWO_ADD_ITEM = 'CHANNEL_TWO_ADD_ITEM'
+
+// Not currently used
+//export const UPDATE_THUMBNAIL_PATH = 'UPDATE_THUMBNAIL_PATH'
 
 /*
 * action creators
@@ -20,23 +22,25 @@ export function receivedInstagramAccessToken(accessToken) {
   }
 }
 
-export function feedsHaveErrored(bool) {
+// Not currently used
+export function channelOneFeedsHaveErrored(bool) {
   return {
-    type: FEEDS_HAVE_ERRORED,
+    type: CHANNEL_ONE_FEEDS_HAVE_ERRORED,
     haveErrored: bool
   };
 }
 
-export function feedsAreLoading(bool) {
+// Not currently used
+export function channelOneFeedsAreLoading(bool) {
   return {
-    type: FEEDS_ARE_LOADING,
+    type: CHANNEL_ONE_FEEDS_ARE_LOADING,
     areLoading: bool
   };
 }
 
-export function feedsFetchSuccess(url, feed) {
+export function channelOneFeedsFetchSuccess(url, feed) {
   return {
-    type: FEEDS_FETCH_SUCCESS,
+    type: CHANNEL_ONE_FEEDS_FETCH_SUCCESS,
     url,
     feed
   };
@@ -47,12 +51,12 @@ export function feedsFetchSuccess(url, feed) {
  * depending on the status of the fetched data. Each of the actions
  * addresses only a part of the store in order to separate concerns.
  */
-export function feedFetchData(url) {
-  console.log('feedFetchData with url: ' + url);
+export function channelOneFetchFeed(url) {
+  console.log('channelOneFetchFeed with url: ' + url);
 
   return (dispatch) => {
-    dispatch(feedsHaveErrored(false));
-    dispatch(feedsAreLoading(true));
+    dispatch(channelOneFeedsHaveErrored(false));
+    dispatch(channelOneFeedsAreLoading(true));
 
     fetch(url)
     .then((response) => {
@@ -60,31 +64,32 @@ export function feedFetchData(url) {
         throw Error(response.statusText);
       }
 
-      dispatch(feedsAreLoading(false));
+      dispatch(channelOneFeedsAreLoading(false));
 
       return response;
     })
     .then(response => response.json())
-    .then(feed => dispatch(feedsFetchSuccess(url, feed)))
-    .catch(() => dispatch(feedsHaveErrored(true)));
+    .then(feed => dispatch(channelOneFeedsFetchSuccess(url, feed)))
+    .catch(() => dispatch(channelOneFeedsHaveErrored(true)));
   };
+}
+
+export function channelTwoAddItem(image) {
+  return {
+    type: CHANNEL_TWO_ADD_ITEM,
+    image
+  }
 }
 
 /*
  * Will set the thumbnailPath property of the MarkerData object in the
  * store's feed that matches the locationName, triggering a re-render.
  */
-export function updateMarkerThumbnail(locationName, thumbnailPath) {
+ // Not currently used
+/*export function updateMarkerThumbnail(locationName, thumbnailPath) {
   return {
     type: UPDATE_THUMBNAIL_PATH,
     locationName,
     thumbnailPath
   }
-}
-
-export function addItemChannelTwo(image) {
-  return {
-    type: ADD_ITEM_CHANNEL_TWO,
-    image
-  }
-}
+}*/
