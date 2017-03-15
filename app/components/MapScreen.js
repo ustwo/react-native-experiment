@@ -98,7 +98,7 @@ class MapScreen extends Component {
 
             // TODO: Check if image exists first, and download if it doesn't
             var imageUrl = instagramPost['images']['standard_resolution']['url'];
-            //downloadImage(this.props, locationName, imageUrl, 'image');
+            downloadImage(this.props, locationName, imageUrl, 'image');
 
             var thumbnailUrl = instagramPost['images']['thumbnail']['url'];
             downloadImage(this.props, locationName, thumbnailUrl, 'thumbnail');
@@ -119,6 +119,7 @@ class MapScreen extends Component {
             key={i}
             title={markerData.name}
             coordinate={{latitude: markerData.latitude, longitude: markerData.longitude}}
+            onSelect={() => this.onMarkerPress(markerData.name, markerData.latitude, markerData.longitude)}
             onPress={() => this.onMarkerPress(markerData.name, markerData.latitude, markerData.longitude)}>
             <MapView.Callout>
                 <View>
@@ -130,6 +131,7 @@ class MapScreen extends Component {
     );
   }
 
+  // WORKAROUND NOTE: onSelect triggers in iOS and onPress triggers in Android
   onMarkerPress(name, latitude, longitude) {
     console.log("PRESSED MARKER: " + name + " at " + latitude + ", " + longitude);
 
@@ -141,25 +143,6 @@ class MapScreen extends Component {
       }
     });
   }
-
-  /*updateChannelTwoPreviews() {
-    if (this.state.pressedMarker.name && RNFetchBlob.fs.isDir(Constants.CACHED_IMAGES_DIR + this.state.pressedMarker.name)) {
-      RNFetchBlob.fs.ls(Constants.CACHED_IMAGES_DIR + this.state.pressedMarker.name)
-      .then((files) => {
-        var thumbnails = [];
-
-        files.map((file) => {
-          if (file.indexOf("thumbnail-") > -1) {
-            thumbnails.push(Constants.CACHED_IMAGES_DIR + this.state.pressedMarker.name + "/" + file);
-          }
-        });
-
-        this.setState({
-          channelTwoPreviews: thumbnails
-        });
-      });
-    }
-  }*/
 
   getChannelTwoPreviews() {
     return this.props.channelTwo.map((thumbnailPath, i) =>
