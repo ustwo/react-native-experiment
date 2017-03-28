@@ -1,32 +1,20 @@
-import MarkerData from './MarkerData'
+import MarkerData from './MarkerData';
+import traverse from 'traverse';
 
+/*
+ * Ideally, the hostname shouldn't be needed anymore (making this not really a factory).
+ * We should be able to parse any geolocation data feed and send back a list of MarkerData objects.
+ * But keep it around just in case we decide to use it in the future or something...
+ */
 export default class MarkerFactory {
   static build(hostname, feed) {
-    if (hostname.indexOf('instagram') > -1) { // api.instagram.com
-      var data = feed['data'];
-      // There are two types of supported instagram results:
-      // A list of locations (look for the keyword 'latitude')
-      // or a list of media images (look for the keyword 'filter').
-      // We really only need to check the first element to make a determination.
-      var firstElement = data[0];
 
-      if ('latitude' in firstElement) {
-        return getInstagramLocationMarkers(data);
-      } else if ('filter' in firstElement) {
-        return data; // TODO: Markers that display an image
-      } else {
-        return data; // TODO: Defeult instagram markers
-      }
-    } else if (hostname.indexOf('maps.googleapis') > -1) {  // maps.googleapis.com
-      return getGoogleMarkers(feed);
-    } else {
-      return feed;
-    }
+    return getMarkers(feed);
   }
 }
 
 /*
- * Example input:
+ * Example instagram input:
  * {
  *   "data":[
  *      {
@@ -47,24 +35,8 @@ export default class MarkerFactory {
  *      "code":200
  *   }
  * }
- */
-function getInstagramLocationMarkers(data) {
-  var markers = [];
-
-  data.map(locationData => {
-    var markerData = new MarkerData(locationData['id']);
-    markerData.name = locationData['name'];
-    markerData.latitude = locationData['latitude'];
-    markerData.longitude = locationData['longitude'];
-
-    markers.push(markerData);
-  });
-
-  return markers;
-}
-
-/*
- * Example input:
+ *
+ * Example googleapis input:
  * {
  *   "html_attributions" : [],
  *   "next_page_token" : "CpQCAQEAADdRkn4TtcMbWxpLIjhkNJm56OQx0tR8vrwwdJZXl-Y-4_S2n4P7PYmOKnxqQiSq_GKdLXDdNAZF4CkvwvKqr54fUyWpt96NCHKnj8Dcrvk2aBbIhm97xjP2HmTTF6QJz-_G_fflo3auKJh2k0KV_4ialHVp79FXRTpwB9QTRe46tUGs5nUsneVsPtyqsRgKnOIyis6JJmMN6PkIa8aMwWNFHl0KXe14i1k3lcbIRrukdom7Dflxe_-Dgc0GtGVJpQV5yLh12J07rVos2j53q3RqVzGiadOOwfzyTJ1RBkf9LBXqyUxIHVNGhXOMFLtdB2jGmnwm0qqD9sJ2scvhg5-HZn9LoV2O9LJYn464z8-3EhBibxmVaqutGz4JFh4wne2hGhTatBlkqDEktgN43Pg1M7AjkfgTiQ",
@@ -116,23 +88,58 @@ function getInstagramLocationMarkers(data) {
  *    ]
  *  }
  */
-function getGoogleMarkers(feed) {
+function getMarkers(feed) {
   var markers = [];
+  var latArray = [];
+  var lngArray = [];
+  var idArray = [];
+  var nameArray = [];
 
-  var keys = Object.keys(feed['results']);
+  traverse(feed).map(function (value) {
+    if (this.isLeaf) {
+      //console.log("traverse level: " + this.level + ", key: " + this.key + ", value: " + value);
 
-  for (key in keys) {
-    var result = feed['results'][key];
+      if (this.key == 'lat' || this.key == 'latitude') {
+        extractBestValue(this, value, latArray);
+      } else if (this.key == 'lng' || this.key == 'longitude') {
+        extractBestValue(this, value, lngArray);
+      } else if (this.key == 'id') {
+        extractBestValue(this, value, idArray);
+      } else if (this.key == 'name') {
+        extractBestValue(this, value, nameArray);
+      }
+    }
+  });
 
-    var markerData = new MarkerData(result['id']);
-    markerData.name = result['name'];
+  for (var i = 1; i < latArray.length; i = i + 2) {
+    var markerData = new MarkerData(idArray[i]);
 
-    var location = result['geometry']['location'];
-    markerData.latitude = location['lat'];
-    markerData.longitude = location['lng'];
+    markerData.name = nameArray[i];
+    markerData.latitude = latArray[i];
+    markerData.longitude = lngArray[i];
 
     markers.push(markerData);
   }
 
   return markers;
+}
+
+// TODO: Address the case when something like 'id' and 'location_id' are at
+//       the same tree level and we should opt to use location_id
+function extractBestValue(context, nodeValue, array) {
+  var indexOfLastTreeLevel = array.length - 2;
+
+  if (array.length == 0) {
+    // Array is empty, initialize with the first encountered value
+    array.push(context.level, nodeValue);
+  } else if (array[indexOfLastTreeLevel] > context.level) {
+    // The current encountered value is at a lower level than the one previously saved;
+    // the previous value should be replaced by the current one
+    array[indexOfLastTreeLevel] = context.level;
+    array[indexOfLastTreeLevel + 1] = nodeValue;
+  } else if (array[indexOfLastTreeLevel] == context.level) {
+    // Because this node is at the same level as the one previously saved,
+    // it is probably the lat of the next location in the feed
+    array.push(context.level, nodeValue);
+  }
 }

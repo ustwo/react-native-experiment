@@ -40,7 +40,8 @@ class MapScreen extends Component {
 
   componentDidMount() {
     // These dispatches, once the async tasks complete, will update the feeds in the local state (triggering a re-render)
-    this.props.channelOneFetchFeed('https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=' + this.state.latitude + ',' + this.state.longitude + '&radius=1400&type=restaurant&key=AIzaSyD-d7MKoxPuq0XvV3BGXMbuBLRIlo1GX4U');
+    //this.props.channelOneFetchFeed('https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=' + this.state.latitude + ',' + this.state.longitude + '&radius=1400&type=restaurant&key=AIzaSyD-d7MKoxPuq0XvV3BGXMbuBLRIlo1GX4U');
+    this.props.channelOneFetchFeed('https://api.instagram.com/v1/locations/search?lat=' + this.state.latitude + '&lng=' + this.state.longitude + '&access_token=' + this.props.instagramAccessToken);
   }
 
   /*
