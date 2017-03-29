@@ -9,7 +9,7 @@ import {
   //UPDATE_THUMBNAIL_PATH
 } from '../actions/actions';
 
-import MarkerFactory from '../models/MarkerFactory'
+import MarkerFeedBuilder from '../models/MarkerFeedBuilder'
 
 export function receivedInstagramAccessToken(state = '', action) {
   switch (action.type) {
@@ -51,7 +51,7 @@ export function channelOneFeeds(state = [], action) {
 
       newState.push({
         source: hostname,
-        feed: MarkerFactory.build(hostname, action.feed)
+        feed: MarkerFeedBuilder.build(hostname, action.feed)
       });
 
       return newState;

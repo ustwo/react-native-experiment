@@ -2,13 +2,11 @@ import MarkerData from './MarkerData';
 import traverse from 'traverse';
 
 /*
- * Ideally, the hostname shouldn't be needed anymore (making this not really a factory).
- * We should be able to parse any geolocation data feed and send back a list of MarkerData objects.
- * But keep it around just in case we decide to use it in the future or something...
+ * Create an array of map markers by extracting relevant data from the input geolocation feed.
+ * NOTE: hostname is not currently utilized for anything, but may be useful in the future...
  */
-export default class MarkerFactory {
+export default class MarkerFeedBuilder {
   static build(hostname, feed) {
-
     return getMarkers(feed);
   }
 }
@@ -122,8 +120,12 @@ function getMarkers(feed) {
   return markers;
 }
 
-// TODO: Address the case when something like 'id' and 'location_id' are at
-//       the same tree level and we should opt to use location_id
+/*
+ * Assumptions: A key such as "lat" may appear several times in a single geolocation item
+ *              (e.g. the lat-lng pair for the location as well as lat-lng pairs that describe
+ *              some sort of bounding box for the location). Assume that the value of "lat"
+ *              that appears closer to the root node is the value we want to extract.
+ */
 function extractBestValue(context, nodeValue, array) {
   var indexOfLastTreeLevel = array.length - 2;
 
