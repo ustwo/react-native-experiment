@@ -97,8 +97,6 @@ function getMarkers(feed) {
 
   traverse(feed).map(function (value) {
     if (this.isLeaf) {
-      //console.log("traverse level: " + this.level + ", key: " + this.key + ", value: " + value);
-
       if (this.key == 'lat' || this.key == 'latitude') {
         extractBestValue(this, value, latArray);
       } else if (this.key == 'lng' || this.key == 'longitude') {
@@ -134,12 +132,21 @@ function extractBestValue(context, nodeValue, array) {
     array.push(context.level, nodeValue);
   } else if (array[indexOfLastTreeLevel] > context.level) {
     // The current encountered value is at a lower level than the one previously saved;
-    // the previous value should be replaced by the current one
-    array[indexOfLastTreeLevel] = context.level;
-    array[indexOfLastTreeLevel + 1] = nodeValue;
+    // Remove any entries that were part of the previous level
+    var lastTreeLevel = array[indexOfLastTreeLevel];
+
+    if (indexOfLastTreeLevel - 2 >= 0) {
+      for (var i = indexOfLastTreeLevel; i >= 0; i = i - 2) {
+        if (array[i] == lastTreeLevel) {
+          array.splice(i, 2);
+        }
+      }
+    }
+
+    array.push(context.level, nodeValue);
   } else if (array[indexOfLastTreeLevel] == context.level) {
     // Because this node is at the same level as the one previously saved,
-    // it is probably the lat of the next location in the feed
+    // it is probably one of the desired values of the next location in the feed
     array.push(context.level, nodeValue);
   }
 }

@@ -1,3 +1,5 @@
+import testdata from '../config/testdata'
+
 /*
 * action types
 */
@@ -69,6 +71,7 @@ export function channelOneFetchFeed(url) {
       return response;
     })
     .then(response => response.json())
+    //.then(response => testdata) // Comment line above and uncomment this one to use testdata.js data
     .then(feed => dispatch(channelOneFeedsFetchSuccess(url, feed)))
     .catch(() => dispatch(channelOneFeedsHaveErrored(true)));
   };
