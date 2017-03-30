@@ -3,6 +3,7 @@ import {
   CHANNEL_ONE_FEEDS_HAVE_ERRORED,
   CHANNEL_ONE_FEEDS_ARE_LOADING,
   CHANNEL_ONE_FEEDS_FETCH_SUCCESS,
+  CLEAR_CHANNEL_ONE,
   CHANNEL_TWO_ADD_ITEM
 
   // Not currently used
@@ -43,6 +44,9 @@ export function channelOneFeedsAreLoading(state = false, action) {
 
 export function channelOneFeeds(state = [], action) {
   switch (action.type) {
+    case CLEAR_CHANNEL_ONE:
+      return [];
+
     case CHANNEL_ONE_FEEDS_FETCH_SUCCESS:
       // Add the new feed to the existing list of feeds
       var newState = Object.assign([], state);

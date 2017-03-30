@@ -28,20 +28,21 @@ class MapScreen extends Component {
     super(props);
 
     this.state = {
-      latitude: 40.7503287,
-      longitude: -73.9936573,
+      mapRegion: {
+        latitude: 40.7503287,
+        longitude: -73.9936573,
+        latitudeDelta: 0.03,
+        longitudeDelta: 0.03
+      },
       instagramLocationIds: new Set(), // TODO: Store in Realm for persistence (less Instagram API requests)?
       pressedMarker: {
         name: ''
       },
       bounceValue: new Animated.Value(0)  // Initial position of Channel Two container
     };
-  }
 
-  componentDidMount() {
-    // These dispatches, once the async tasks complete, will update the feeds in the local state (triggering a re-render)
-    this.props.channelOneFetchFeed('https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=' + this.state.latitude + ',' + this.state.longitude + '&radius=1400&type=restaurant&key=AIzaSyD-d7MKoxPuq0XvV3BGXMbuBLRIlo1GX4U');
-    //this.props.channelOneFetchFeed('https://api.instagram.com/v1/locations/search?lat=' + this.state.latitude + '&lng=' + this.state.longitude + '&access_token=' + this.props.instagramAccessToken);
+    // Bind this function in order to have access to "this" inside the callback
+    this.onRegionChangeComplete = this.onRegionChangeComplete.bind(this);
   }
 
   /*
@@ -128,7 +129,7 @@ class MapScreen extends Component {
 
   // May be called upon re-render caused by a Redux state change.
   getFeedMarkers() {
-    return this.props.channelOneFeeds.map(  // Iterate through the master channel one feeds array that contains individual feeds
+    return this.props.channelOneFeeds.map(  // Iterate through the master channelOne feeds array that contains individual feeds
       feed => feed.feed.map(                // Iterate through the marker data contained in each individual feed
         (markerData, i) =>
           <MapView.Marker
@@ -158,6 +159,12 @@ class MapScreen extends Component {
         name: name
       }
     });
+  }
+
+  onRegionChangeComplete(mapRegion) {
+    this.setState({ mapRegion });
+    this.props.channelOneFetchFeed('https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=' + this.state.mapRegion.latitude + ',' + this.state.mapRegion.longitude + '&radius=1400&type=restaurant&key=AIzaSyD-d7MKoxPuq0XvV3BGXMbuBLRIlo1GX4U');
+    //this.props.channelOneFetchFeed('https://api.instagram.com/v1/locations/search?lat=' + this.state.mapRegion.latitude + '&lng=' + this.state.mapRegion.longitude + '&access_token=' + this.props.instagramAccessToken);
   }
 
   // Expands or contracts Channel Two.
@@ -192,11 +199,8 @@ class MapScreen extends Component {
       <View style={styles.container}>
         <MapView
           style={styles.map}  // A style is required, otherwise the screen appears blank
-          initialRegion={{
-            latitude: this.state.latitude,
-            longitude: this.state.longitude,
-            latitudeDelta: 0.03,
-            longitudeDelta: 0.03}}
+          initialRegion={this.state.mapRegion}
+          onRegionChangeComplete={this.onRegionChangeComplete}
           moveOnMarkerPress={false}
           showsUserLocation={true}
           showsMyLocationButton={true}>

@@ -8,6 +8,7 @@ export const RECEIVED_INSTAGRAM_ACCESS_TOKEN = 'RECEIVED_INSTAGRAM_ACCESS_TOKEN'
 export const CHANNEL_ONE_FEEDS_HAVE_ERRORED = 'CHANNEL_ONE_FEEDS_HAVE_ERRORED'
 export const CHANNEL_ONE_FEEDS_ARE_LOADING = 'CHANNEL_ONE_FEEDS_ARE_LOADING'
 export const CHANNEL_ONE_FEEDS_FETCH_SUCCESS = 'CHANNEL_ONE_FEEDS_FETCH_SUCCESS'
+export const CLEAR_CHANNEL_ONE = 'CLEAR_CHANNEL_ONE'
 export const CHANNEL_TWO_ADD_ITEM = 'CHANNEL_TWO_ADD_ITEM'
 
 // Not currently used
@@ -48,6 +49,12 @@ export function channelOneFeedsFetchSuccess(url, feed) {
   };
 }
 
+export function clearChannelOne() {
+  return {
+    type: CLEAR_CHANNEL_ONE
+  };
+}
+
 /*
  * An action creator that dispatches one of the feed action creators above
  * depending on the status of the fetched data. Each of the actions
@@ -72,7 +79,10 @@ export function channelOneFetchFeed(url) {
     })
     .then(response => response.json())
     //.then(response => testdata) // Comment line above and uncomment this one to use testdata.js data
-    .then(feed => dispatch(channelOneFeedsFetchSuccess(url, feed)))
+    .then(feed => {
+      dispatch(clearChannelOne());
+      dispatch(channelOneFeedsFetchSuccess(url, feed));
+    })
     .catch(() => dispatch(channelOneFeedsHaveErrored(true)));
   };
 }
