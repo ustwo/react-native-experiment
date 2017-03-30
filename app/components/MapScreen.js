@@ -14,9 +14,10 @@ import MapView from 'react-native-maps';
 import RNFetchBlob from 'react-native-fetch-blob';
 import Grid from 'react-native-grid-component'
 
+import { channelOneSource, channelTwoSource } from '../config/feedSources';
 import Constants from '../config/Constants';
 import ImageDownloader from '../networking/ImageDownloader';
-import { channelOneFetchFeed, channelOneFeedsFetchSuccess, channelTwoAddItem } from '../actions/actions'
+import { channelOneFetchFeed, channelOneFeedsFetchSuccess, channelTwoAddItem } from '../actions/actions';
 
 const screen = Dimensions.get('window');
 
@@ -43,6 +44,15 @@ class MapScreen extends Component {
 
     // Bind this function in order to have access to "this" inside the callback
     this.onRegionChangeComplete = this.onRegionChangeComplete.bind(this);
+  }
+
+  /*
+   * Channel One API Requests.
+   */
+
+  onRegionChangeComplete(mapRegion) {
+    this.setState({ mapRegion });
+    this.props.channelOneFetchFeed(channelOneSource(this.state.mapRegion.latitude, this.state.mapRegion.longitude, ''));
   }
 
   /*
@@ -153,18 +163,12 @@ class MapScreen extends Component {
     console.log("PRESSED MARKER: " + name + " at " + latitude + ", " + longitude);
 
     // TODO: First check if instagram location is already in current list, if not request nearby insta locations
-    this.getInstagramLocations('https://api.instagram.com/v1/locations/search?lat=' + latitude + '&lng=' + longitude + '&access_token=' + this.props.instagramAccessToken);
+    this.getInstagramLocations(channelTwoSource(latitude, longitude, this.props.instagramAccessToken));
     this.setState({
       pressedMarker: {
         name: name
       }
     });
-  }
-
-  onRegionChangeComplete(mapRegion) {
-    this.setState({ mapRegion });
-    this.props.channelOneFetchFeed('https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=' + this.state.mapRegion.latitude + ',' + this.state.mapRegion.longitude + '&radius=1400&type=restaurant&key=AIzaSyD-d7MKoxPuq0XvV3BGXMbuBLRIlo1GX4U');
-    //this.props.channelOneFetchFeed('https://api.instagram.com/v1/locations/search?lat=' + this.state.mapRegion.latitude + '&lng=' + this.state.mapRegion.longitude + '&access_token=' + this.props.instagramAccessToken);
   }
 
   // Expands or contracts Channel Two.
