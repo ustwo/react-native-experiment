@@ -12,7 +12,8 @@ import {
 import { connect } from 'react-redux';
 import MapView from 'react-native-maps';
 import RNFetchBlob from 'react-native-fetch-blob';
-import Grid from 'react-native-grid-component'
+import Grid from 'react-native-grid-component';
+import { Drawer, Header, Body, Button, Icon, Title } from 'native-base';
 
 import { channelOneSource, channelTwoSource } from '../config/feedSources';
 import Constants from '../config/Constants';
@@ -198,9 +199,24 @@ class MapScreen extends Component {
       source={{uri: 'file:' + Constants.CACHED_IMAGES_DIR + thumbnailPath}}
       style={styles.channelTwoItem} />
 
+  onMenuPress() {
+    console.log("ON MENU PRESS.");
+  }
+
   render() {
     return (
       <View style={styles.container}>
+        <Header>
+          <Body>
+            <Title>Map Mixer</Title>
+          </Body>
+          <Button
+            onPress={() => this.onMenuPress()}
+            iconLeft
+            light>
+            <Icon name='person' />
+          </Button>
+        </Header>
         <MapView
           style={styles.map}  // A style is required, otherwise the screen appears blank
           initialRegion={this.state.mapRegion}
@@ -288,11 +304,8 @@ const styles = StyleSheet.create({
     ...StyleSheet.absoluteFillObject
   },
   map: {
-    position: 'absolute',
-    top: 0,
-    left: 0,
-    right: 0,
-    bottom: 0
+    padding: 0,
+    flex: 1
   },
   channelTwoContainer: {
     position: 'absolute',
