@@ -15,7 +15,8 @@ import RNFetchBlob from 'react-native-fetch-blob';
 import Grid from 'react-native-grid-component';
 import { Drawer, Header, Body, Button, Icon, Title } from 'native-base';
 
-import { channelOneSource, channelTwoSource } from '../config/feedSources';
+import InstagramAuth from './InstagramAuth';
+import { channelOneSource, channelTwoSource, channelTwoAuthUrl } from '../config/feedSources';
 import Constants from '../config/Constants';
 import ImageDownloader from '../networking/ImageDownloader';
 import { channelOneFetchFeed, channelOneFeedsFetchSuccess, channelTwoAddItem } from '../actions/actions';
@@ -200,7 +201,12 @@ class MapScreen extends Component {
       style={styles.channelTwoItem} />
 
   onMenuPress() {
-    console.log("ON MENU PRESS.");
+		this.props.navigator.push({
+			component: InstagramAuth,
+			passProps: {
+        uri: channelTwoAuthUrl()
+			}
+		});
   }
 
   render() {
@@ -212,7 +218,7 @@ class MapScreen extends Component {
           </Body>
           <Button
             onPress={() => this.onMenuPress()}
-            iconLeft
+            iconCenter
             light>
             <Icon name='person' />
           </Button>
