@@ -6,7 +6,9 @@ import {
   View,
   Image,
   Text,
+  Platform,
   TouchableHighlight,
+  TouchableNativeFeedback,
   Animated
 } from 'react-native';
 import { connect } from 'react-redux';
@@ -139,6 +141,15 @@ class MapScreen extends Component {
    * Render helper functions
    */
 
+   onMenuPress() {
+ 		this.props.navigator.push({
+ 			component: InstagramAuth,
+ 			passProps: {
+         uri: channelTwoAuthUrl()
+ 			}
+ 		});
+   }
+
   // May be called upon re-render caused by a Redux state change.
   getFeedMarkers() {
     return this.props.channelOneFeeds.map(  // Iterate through the master channelOne feeds array that contains individual feeds
@@ -173,6 +184,28 @@ class MapScreen extends Component {
     });
   }
 
+  renderChannelTwo() {
+    if (Platform.OS === 'android') {
+      return <TouchableNativeFeedback onPress={() => {this.toggleChannelTwo()}}>
+        <Animated.View style={[styles.channelTwoContainer,
+          {transform: [{translateY: this.state.bounceValue}]}]}>
+        </Animated.View>
+      </TouchableNativeFeedback>
+    } else {
+      return <TouchableHighlight onPress={() => {this.toggleChannelTwo()}}>
+        <Animated.View style={[styles.channelTwoContainer,
+          {transform: [{translateY: this.state.bounceValue}]}]}>
+          <Grid
+            style={styles.channelTwoList}
+            renderItem={this.renderChannelTwoItem}
+            data={this.props.channelTwo}
+            itemsPerRow={3}
+          />
+        </Animated.View>
+      </TouchableHighlight>
+    }
+  }
+
   // Expands or contracts Channel Two.
   // May be called upon re-render caused by a Redux state change.
   toggleChannelTwo() {
@@ -200,15 +233,6 @@ class MapScreen extends Component {
       source={{uri: 'file:' + Constants.CACHED_IMAGES_DIR + thumbnailPath}}
       style={styles.channelTwoItem} />
 
-  onMenuPress() {
-		this.props.navigator.push({
-			component: InstagramAuth,
-			passProps: {
-        uri: channelTwoAuthUrl()
-			}
-		});
-  }
-
   render() {
     return (
       <Container>
@@ -233,20 +257,7 @@ class MapScreen extends Component {
             showsMyLocationButton={true}>
             {this.getFeedMarkers()}
           </MapView>
-          {
-            (this.props.channelTwo.length > 0) &&
-            <TouchableHighlight onPress={() => {this.toggleChannelTwo()}}>
-              <Animated.View style={[styles.channelTwoContainer,
-                {transform: [{translateY: this.state.bounceValue}]}]}>
-                <Grid
-                  style={styles.channelTwoList}
-                  renderItem={this.renderChannelTwoItem}
-                  data={this.props.channelTwo}
-                  itemsPerRow={3}
-                />
-              </Animated.View>
-            </TouchableHighlight>
-          }
+          { (this.props.channelTwo.length > 0) && this.renderChannelTwo() }
         </View>
       </Container>
     );
