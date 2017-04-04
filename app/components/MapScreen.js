@@ -13,7 +13,7 @@ import { connect } from 'react-redux';
 import MapView from 'react-native-maps';
 import RNFetchBlob from 'react-native-fetch-blob';
 import Grid from 'react-native-grid-component';
-import { Drawer, Header, Body, Button, Icon, Title } from 'native-base';
+import { Container, Header, Body, Button, Icon, Title, Content } from 'native-base';
 
 import InstagramAuth from './InstagramAuth';
 import { channelOneSource, channelTwoSource, channelTwoAuthUrl } from '../config/feedSources';
@@ -211,7 +211,7 @@ class MapScreen extends Component {
 
   render() {
     return (
-      <View style={styles.container}>
+      <Container>
         <Header>
           <Body>
             <Title>Map Mixer</Title>
@@ -223,30 +223,32 @@ class MapScreen extends Component {
             <Icon name='person' />
           </Button>
         </Header>
-        <MapView
-          style={styles.map}  // A style is required, otherwise the screen appears blank
-          initialRegion={this.state.mapRegion}
-          onRegionChangeComplete={this.onRegionChangeComplete}
-          moveOnMarkerPress={false}
-          showsUserLocation={true}
-          showsMyLocationButton={true}>
-          {this.getFeedMarkers()}
-        </MapView>
-        {
-          (this.props.channelTwo.length > 0) &&
-          <TouchableHighlight onPress={() => {this.toggleChannelTwo()}}>
-            <Animated.View style={[styles.channelTwoContainer,
-              {transform: [{translateY: this.state.bounceValue}]}]}>
-              <Grid
-                style={styles.channelTwoList}
-                renderItem={this.renderChannelTwoItem}
-                data={this.props.channelTwo}
-                itemsPerRow={3}
-              />
-            </Animated.View>
-          </TouchableHighlight>
-        }
-      </View>
+        <View style={styles.content}>
+          <MapView
+            style={styles.map}  // A style is required, otherwise the screen appears blank
+            initialRegion={this.state.mapRegion}
+            onRegionChangeComplete={this.onRegionChangeComplete}
+            moveOnMarkerPress={false}
+            showsUserLocation={true}
+            showsMyLocationButton={true}>
+            {this.getFeedMarkers()}
+          </MapView>
+          {
+            (this.props.channelTwo.length > 0) &&
+            <TouchableHighlight onPress={() => {this.toggleChannelTwo()}}>
+              <Animated.View style={[styles.channelTwoContainer,
+                {transform: [{translateY: this.state.bounceValue}]}]}>
+                <Grid
+                  style={styles.channelTwoList}
+                  renderItem={this.renderChannelTwoItem}
+                  data={this.props.channelTwo}
+                  itemsPerRow={3}
+                />
+              </Animated.View>
+            </TouchableHighlight>
+          }
+        </View>
+      </Container>
     );
   }
 }
@@ -306,12 +308,15 @@ export default connect(mapStateToProps, mapDispatchToProps)(MapScreen);
  */
 
 const styles = StyleSheet.create({
-  container: {
-    ...StyleSheet.absoluteFillObject
+  content: {
+    flex: 1
   },
   map: {
-    padding: 0,
-    flex: 1
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0
   },
   channelTwoContainer: {
     position: 'absolute',

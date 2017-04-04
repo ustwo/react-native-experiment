@@ -14,7 +14,6 @@ import {
 import { connect } from 'react-redux';
 
 import { receivedInstagramAccessToken } from '../actions/actions'
-import MapScreen from './MapScreen'
 
 class InstagramAuth extends Component {
 
@@ -33,12 +32,6 @@ class InstagramAuth extends Component {
   onPressBack() {
     this.props.navigator.pop();
   }
-
-	onPressMap() {
-		this.props.navigator.replace({
-			component: MapScreen
-		})
-	}
 
   render() {
     return (
@@ -61,11 +54,6 @@ class InstagramAuth extends Component {
 						{ this.state.isLoggedIn ?
 							<View>
 								<Text>You are logged in</Text>
-								<Button
-									style={styles.button}
-									onPress={() => this.onPressMap()}>
-									<Text>View Map</Text>
-								</Button>
 							</View> :
 							<WebView
 	              source={{uri: this.props.uri}}
