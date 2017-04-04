@@ -9,12 +9,13 @@ import {
   Platform,
   TouchableHighlight,
   TouchableNativeFeedback,
-  Animated
+  Animated,
+  ListView
 } from 'react-native';
 import { connect } from 'react-redux';
 import MapView from 'react-native-maps';
 import RNFetchBlob from 'react-native-fetch-blob';
-import Grid from 'react-native-grid-component';
+import GridView from 'react-native-easy-gridview';
 import { Container, Header, Body, Button, Icon, Title, Content } from 'native-base';
 
 import InstagramAuth from './InstagramAuth';
@@ -32,6 +33,8 @@ class MapScreen extends Component {
   constructor(props) {
     super(props);
 
+    var ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 != r2});
+
     this.state = {
       mapRegion: {
         latitude: 40.7503287,
@@ -43,6 +46,7 @@ class MapScreen extends Component {
       pressedMarker: {
         name: ''
       },
+      gridViewData: [],
       bounceValue: new Animated.Value(0)  // Initial position of Channel Two container
     };
 
@@ -185,26 +189,43 @@ class MapScreen extends Component {
   }
 
   renderChannelTwo() {
+    var ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
+
     if (Platform.OS === 'android') {
+      // Can't get TouchableHighlight to work in Android...
       return <TouchableNativeFeedback onPress={() => {this.toggleChannelTwo()}}>
         <Animated.View style={[styles.channelTwoContainer,
           {transform: [{translateY: this.state.bounceValue}]}]}>
+          <GridView
+            dataSource={ds.cloneWithRows(this.props.channelTwo)}
+            renderRow={this.renderChannelTwoItem}
+            numberOfItemsPerRow={3}
+            removeClippedSubviews={false}
+          />
         </Animated.View>
       </TouchableNativeFeedback>
     } else {
+      // and TouchableNativeFeedback isn't supported in iOS
       return <TouchableHighlight onPress={() => {this.toggleChannelTwo()}}>
         <Animated.View style={[styles.channelTwoContainer,
           {transform: [{translateY: this.state.bounceValue}]}]}>
-          <Grid
-            style={styles.channelTwoList}
-            renderItem={this.renderChannelTwoItem}
-            data={this.props.channelTwo}
-            itemsPerRow={3}
+          <GridView
+            dataSource={ds.cloneWithRows(this.props.channelTwo)}
+            renderRow={this.renderChannelTwoItem}
+            numberOfItemsPerRow={3}
+            removeClippedSubviews={false}
           />
         </Animated.View>
       </TouchableHighlight>
     }
   }
+
+  renderChannelTwoItem = (thumbnailPath) =>
+    <View>
+      <Image
+        source={{uri: 'file:' + Constants.CACHED_IMAGES_DIR + thumbnailPath}}
+        style={styles.channelTwoItem} />
+    </View>
 
   // Expands or contracts Channel Two.
   // May be called upon re-render caused by a Redux state change.
@@ -226,12 +247,6 @@ class MapScreen extends Component {
 
     isChannelTwoExpanded = !isChannelTwoExpanded;
   }
-
-  renderChannelTwoItem = (thumbnailPath, i) =>
-    <Image
-      key={i}
-      source={{uri: 'file:' + Constants.CACHED_IMAGES_DIR + thumbnailPath}}
-      style={styles.channelTwoItem} />
 
   render() {
     return (

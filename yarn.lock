@@ -3156,16 +3156,16 @@ react-native-easy-grid@0.1.7:
   dependencies:
     lodash "^4.11.1"
 
+react-native-easy-gridview@^1.0.1:
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/react-native-easy-gridview/-/react-native-easy-gridview-1.0.1.tgz#153653bd089b2da70ff7048869c5d33adfc08b6f"
+
 react-native-fetch-blob@^0.10.2:
   version "0.10.3"
   resolved "https://registry.yarnpkg.com/react-native-fetch-blob/-/react-native-fetch-blob-0.10.3.tgz#9d841f11f72ae1a519e7da337999a713050accba"
   dependencies:
     base-64 "0.1.0"
     glob "^7.0.6"
-
-react-native-grid-component@^1.0.4:
-  version "1.0.4"
-  resolved "https://registry.yarnpkg.com/react-native-grid-component/-/react-native-grid-component-1.0.4.tgz#1a14b21103b96adc110b5ec0e754615cfafdd855"
 
 react-native-keyboard-aware-scroll-view@0.2.7:
   version "0.2.7"
