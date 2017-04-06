@@ -22,7 +22,7 @@ import InstagramAuth from './InstagramAuth';
 import { channelOneSource, channelTwoSource, channelTwoAuthUrl } from '../config/feedSources';
 import Constants from '../config/Constants';
 import ImageDownloader from '../networking/ImageDownloader';
-import { channelOneFetchFeed, channelOneFeedsFetchSuccess, channelTwoAddItem } from '../actions/actions';
+import { channelOneFetchFeed, channelOneFeedsFetchSuccess, clearChannelTwo, channelTwoAddItem } from '../actions/actions';
 
 const screen = Dimensions.get('window');
 
@@ -71,7 +71,7 @@ class MapScreen extends Component {
   getInstagramLocations(url) {
     fetch(url)
     .then((response) => {
-      console.log("RESPONSE: " + JSON.stringify(response));
+      console.log("insta locations: " + JSON.stringify(response));
 
       if (!response.ok) {
         throw Error(response.statusText);
@@ -82,16 +82,17 @@ class MapScreen extends Component {
     .then(response => response.json())
     .then(feed => {
       var data = feed['data'];
+
       data.map(locationData => {
         if (!this.state.instagramLocationIds.has(locationData['id'])) {
           this.state.instagramLocationIds.add(locationData['id']);
-
-          // TODO: Need more robust location name matching
-          if (locationData['name'] == this.state.pressedMarker.name) {
-            this.getInstagramLocationImages([locationData['id']]);
-          }
         }
-      })
+
+        // TODO: Need more robust location name matching
+        if (locationData['name'] == this.state.pressedMarker.name) {
+          this.getInstagramLocationImages([locationData['id']]);
+        }
+      });
 
       //this.props.channelOneFetchSuccess(url, feed)
     })
@@ -115,8 +116,6 @@ class MapScreen extends Component {
       })
       .then(response => response.json())
       .then(feed => {
-        console.log("getInstagramLocationImages feed: " + JSON.stringify(feed));
-
         var data = feed['data'];
         if (data.length > 0) {
           var keys = Object.keys(data);
@@ -177,7 +176,7 @@ class MapScreen extends Component {
 
   // WORKAROUND NOTE: onSelect triggers in iOS and onPress triggers in Android
   onMarkerPress(name, latitude, longitude) {
-    console.log("PRESSED MARKER: " + name + " at " + latitude + ", " + longitude);
+    this.props.clearChannelTwo();
 
     // TODO: First check if instagram location is already in current list, if not request nearby insta locations
     this.getInstagramLocations(channelTwoSource(latitude, longitude, this.props.instagramAccessToken));
@@ -189,6 +188,8 @@ class MapScreen extends Component {
   }
 
   renderChannelTwo() {
+    console.log("channel two size: " + this.props.channelTwo.length);
+
     var ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
 
     if (Platform.OS === 'android') {
@@ -249,6 +250,7 @@ class MapScreen extends Component {
   }
 
   render() {
+    console.log("channel TOO length: " + this.props.channelTwo.length);
     return (
       <Container>
         <Header>
@@ -320,6 +322,7 @@ const mapDispatchToProps = (dispatch) => {
   return {
     channelOneFetchFeed: (url) => dispatch(channelOneFetchFeed(url)),
     channelOneFetchSuccess: (url, feed) => dispatch(channelOneFeedsFetchSuccess(url, feed)),
+    clearChannelTwo: () => dispatch(clearChannelTwo()),
     channelTwoAddItem: (image) => dispatch(channelTwoAddItem(image))
 
     // Not currently used

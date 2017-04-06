@@ -7,8 +7,9 @@ import testdata from '../config/testdata'
 export const RECEIVED_INSTAGRAM_ACCESS_TOKEN = 'RECEIVED_INSTAGRAM_ACCESS_TOKEN'
 export const CHANNEL_ONE_FEEDS_HAVE_ERRORED = 'CHANNEL_ONE_FEEDS_HAVE_ERRORED'
 export const CHANNEL_ONE_FEEDS_ARE_LOADING = 'CHANNEL_ONE_FEEDS_ARE_LOADING'
-export const CHANNEL_ONE_FEEDS_FETCH_SUCCESS = 'CHANNEL_ONE_FEEDS_FETCH_SUCCESS'
 export const CLEAR_CHANNEL_ONE = 'CLEAR_CHANNEL_ONE'
+export const CHANNEL_ONE_FEEDS_FETCH_SUCCESS = 'CHANNEL_ONE_FEEDS_FETCH_SUCCESS'
+export const CLEAR_CHANNEL_TWO = 'CLEAR_CHANNEL_TWO'
 export const CHANNEL_TWO_ADD_ITEM = 'CHANNEL_TWO_ADD_ITEM'
 
 // Not currently used
@@ -61,8 +62,6 @@ export function clearChannelOne() {
  * addresses only a part of the store in order to separate concerns.
  */
 export function channelOneFetchFeed(url) {
-  console.log('channelOneFetchFeed with url: ' + url);
-
   return (dispatch) => {
     dispatch(channelOneFeedsHaveErrored(false));
     dispatch(channelOneFeedsAreLoading(true));
@@ -84,6 +83,12 @@ export function channelOneFetchFeed(url) {
       dispatch(channelOneFeedsFetchSuccess(url, feed));
     })
     .catch(() => dispatch(channelOneFeedsHaveErrored(true)));
+  };
+}
+
+export function clearChannelTwo() {
+  return {
+    type: CLEAR_CHANNEL_TWO
   };
 }
 

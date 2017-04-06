@@ -2,8 +2,9 @@ import {
   RECEIVED_INSTAGRAM_ACCESS_TOKEN,
   CHANNEL_ONE_FEEDS_HAVE_ERRORED,
   CHANNEL_ONE_FEEDS_ARE_LOADING,
-  CHANNEL_ONE_FEEDS_FETCH_SUCCESS,
   CLEAR_CHANNEL_ONE,
+  CHANNEL_ONE_FEEDS_FETCH_SUCCESS,
+  CLEAR_CHANNEL_TWO,
   CHANNEL_TWO_ADD_ITEM
 
   // Not currently used
@@ -86,6 +87,9 @@ export function channelOneFeeds(state = [], action) {
 
 export function channelTwo(state = [], action) {
   switch (action.type) {
+    case CLEAR_CHANNEL_TWO:
+      return [];
+
     case CHANNEL_TWO_ADD_ITEM:
       var newState = Object.assign([], state);
 
