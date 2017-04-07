@@ -88,11 +88,15 @@ export default class MarkerFeedBuilder {
  */
 function getMarkers(feed) {
   var markers = [];
+
+  // Every push into one of these arrays is comprised of the node's tree level and the node's value.
+  // After extracting values from the JSON response, all the arrays should have the same length.
   var latArray = [];
   var lngArray = [];
   var idArray = [];
   var nameArray = [];
 
+  // Visit every node in the feed tree and save/update values of relevant keys encountered
   traverse(feed).map(function (value) {
     if (this.isLeaf) {
       if (this.key == 'lat' || this.key == 'latitude') {
@@ -107,6 +111,7 @@ function getMarkers(feed) {
     }
   });
 
+  // Create MarkerData objects from the extracted values
   for (var i = 1; i < latArray.length; i = i + 2) {
     var markerData = new MarkerData(idArray[i]);
 
