@@ -16,7 +16,7 @@ import { connect } from 'react-redux';
 import MapView from 'react-native-maps';
 import RNFetchBlob from 'react-native-fetch-blob';
 import GridView from 'react-native-easy-gridview';
-import { Container, Header, Body, Button, Icon, Title, Content } from 'native-base';
+import { Container, Header, Body, Button, Icon, Title } from 'native-base';
 
 import InstagramAuth from './InstagramAuth';
 import { channelOneSource, channelTwoSource, channelTwoAuthUrl } from '../config/feedSources';
@@ -32,8 +32,6 @@ class MapScreen extends Component {
 
   constructor(props) {
     super(props);
-
-    var ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 != r2});
 
     this.state = {
       mapRegion: {
@@ -55,7 +53,7 @@ class MapScreen extends Component {
   }
 
   /*
-   * Channel One API Requests.
+   * Channel One API Requests
    */
 
   onRegionChangeComplete(mapRegion) {
@@ -64,8 +62,8 @@ class MapScreen extends Component {
   }
 
   /*
-   * Channel Two API Requests.
-   * These functions rely on data being available in Channel One.
+   * Channel Two API Requests
+   * These functions rely on data being available in Channel One
    */
 
   getInstagramLocations(url) {
@@ -91,8 +89,6 @@ class MapScreen extends Component {
           this.getInstagramLocationImages([locationData['id']]);
         }
       });
-
-      //this.props.channelOneFetchSuccess(url, feed)
     })
     .catch(() => {
       console.log("getInstagramLocations CATCH");
@@ -151,7 +147,7 @@ class MapScreen extends Component {
  		});
    }
 
-  // May be called upon re-render caused by a Redux state change.
+  // May be called upon re-render caused by a Redux state change
   getFeedMarkers() {
     return this.props.channelOneFeeds.map(  // Iterate through the master channelOne feeds array that contains individual feeds
       feed => feed.feed.map(                // Iterate through the marker data contained in each individual feed
@@ -224,8 +220,8 @@ class MapScreen extends Component {
         style={styles.channelTwoItem} />
     </View>
 
-  // Expands or contracts Channel Two.
-  // May be called upon re-render caused by a Redux state change.
+  // Expands or contracts Channel Two
+  // May be called upon re-render caused by a Redux state change
   toggleChannelTwo() {
     var toValue = (screen.height - 250) * -1;
     if (isChannelTwoExpanded) {

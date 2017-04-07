@@ -1,24 +1,18 @@
 import {
-  RECEIVED_INSTAGRAM_ACCESS_TOKEN,
   CHANNEL_ONE_FEEDS_HAVE_ERRORED,
   CHANNEL_ONE_FEEDS_ARE_LOADING,
   CLEAR_CHANNEL_ONE,
   CHANNEL_ONE_FEEDS_FETCH_SUCCESS,
+  RECEIVED_INSTAGRAM_ACCESS_TOKEN,
   CLEAR_CHANNEL_TWO,
   CHANNEL_TWO_ADD_ITEM
 } from '../actions/actions';
 
 import MarkerFeedBuilder from '../models/MarkerFeedBuilder'
 
-export function receivedInstagramAccessToken(state = '', action) {
-  switch (action.type) {
-    case RECEIVED_INSTAGRAM_ACCESS_TOKEN:
-      return action.accessToken;
-
-    default:
-      return state;
-  }
-}
+/*
+ * Channel One
+ */
 
 export function channelOneFeedsHaveErrored(state = false, action) {
   switch (action.type) {
@@ -63,6 +57,20 @@ export function channelOneFeeds(state = [], action) {
   }
 }
 
+/*
+ * Channel Two
+ */
+
+ export function receivedInstagramAccessToken(state = '', action) {
+   switch (action.type) {
+     case RECEIVED_INSTAGRAM_ACCESS_TOKEN:
+       return action.accessToken;
+
+     default:
+       return state;
+   }
+ }
+
 export function channelTwo(state = [], action) {
   switch (action.type) {
     case CLEAR_CHANNEL_TWO:
@@ -71,10 +79,7 @@ export function channelTwo(state = [], action) {
     case CHANNEL_TWO_ADD_ITEM:
       var newState = Object.assign([], state);
 
-      // TODO: Use a Set instead of an array to avoid duplicates
-      /*if (!newState.has(action.image)) {
-        newState.add(action.image);
-      }*/
+      // TODO: Use a Set instead of an array to avoid duplicates?
       newState.push(action.image);
 
       return newState;
@@ -83,6 +88,10 @@ export function channelTwo(state = [], action) {
       return state;
   }
 }
+
+/*
+ * Utilities
+ */
 
 /*
  * Extract the hostname from the provided URL
