@@ -1,5 +1,3 @@
-import testdata from '../config/testdata'
-
 /*
 * action types
 */
@@ -11,9 +9,6 @@ export const CLEAR_CHANNEL_ONE = 'CLEAR_CHANNEL_ONE'
 export const CHANNEL_ONE_FEEDS_FETCH_SUCCESS = 'CHANNEL_ONE_FEEDS_FETCH_SUCCESS'
 export const CLEAR_CHANNEL_TWO = 'CLEAR_CHANNEL_TWO'
 export const CHANNEL_TWO_ADD_ITEM = 'CHANNEL_TWO_ADD_ITEM'
-
-// Not currently used
-//export const UPDATE_THUMBNAIL_PATH = 'UPDATE_THUMBNAIL_PATH'
 
 /*
 * action creators
@@ -77,7 +72,6 @@ export function channelOneFetchFeed(url) {
       return response;
     })
     .then(response => response.json())
-    //.then(response => testdata) // Comment line above and uncomment this one to use testdata.js data
     .then(feed => {
       dispatch(clearChannelOne());
       dispatch(channelOneFeedsFetchSuccess(url, feed));
@@ -98,16 +92,3 @@ export function channelTwoAddItem(image) {
     image
   }
 }
-
-/*
- * Will set the thumbnailPath property of the MarkerData object in the
- * store's feed that matches the locationName, triggering a re-render.
- */
- // Not currently used
-/*export function updateMarkerThumbnail(locationName, thumbnailPath) {
-  return {
-    type: UPDATE_THUMBNAIL_PATH,
-    locationName,
-    thumbnailPath
-  }
-}*/

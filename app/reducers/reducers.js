@@ -6,9 +6,6 @@ import {
   CHANNEL_ONE_FEEDS_FETCH_SUCCESS,
   CLEAR_CHANNEL_TWO,
   CHANNEL_TWO_ADD_ITEM
-
-  // Not currently used
-  //UPDATE_THUMBNAIL_PATH
 } from '../actions/actions';
 
 import MarkerFeedBuilder from '../models/MarkerFeedBuilder'
@@ -60,25 +57,6 @@ export function channelOneFeeds(state = [], action) {
       });
 
       return newState;
-
-    // Not currently used
-    /*case UPDATE_THUMBNAIL_PATH:
-      var newState = Object.assign([], state);
-
-      for (var i = 0; i < newState.length; i++) {
-        var markers = newState[i]['feed'];
-
-        for (var j = 0; j < markers.length; j++) {
-          var markerData = markers[j];
-
-          if (markerData.name == action.locationName) {
-            markerData.thumbnailPath = action.thumbnailPath;
-            break;
-          }
-        }
-      }
-
-      return newState;*/
 
     default:
       return state;

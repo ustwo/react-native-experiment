@@ -71,8 +71,6 @@ class MapScreen extends Component {
   getInstagramLocations(url) {
     fetch(url)
     .then((response) => {
-      console.log("insta locations: " + JSON.stringify(response));
-
       if (!response.ok) {
         throw Error(response.statusText);
       }
@@ -188,8 +186,6 @@ class MapScreen extends Component {
   }
 
   renderChannelTwo() {
-    console.log("channel two size: " + this.props.channelTwo.length);
-
     var ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
 
     if (Platform.OS === 'android') {
@@ -250,7 +246,6 @@ class MapScreen extends Component {
   }
 
   render() {
-    console.log("channel TOO length: " + this.props.channelTwo.length);
     return (
       <Container>
         <Header>
@@ -297,9 +292,6 @@ async function downloadImage(props, locationName, imageUrl, prefix) {
   .then((res) => {
     if (prefix.indexOf('thumbnail') > -1) {
       props.channelTwoAddItem(locationName + '/thumbnail-' + imageFilename);
-
-      // Not currently used
-      //props.linkThumbnailToMarker(locationName, res.path());
     }
   });
 }
@@ -324,9 +316,6 @@ const mapDispatchToProps = (dispatch) => {
     channelOneFetchSuccess: (url, feed) => dispatch(channelOneFeedsFetchSuccess(url, feed)),
     clearChannelTwo: () => dispatch(clearChannelTwo()),
     channelTwoAddItem: (image) => dispatch(channelTwoAddItem(image))
-
-    // Not currently used
-    //linkThumbnailToMarker: (locationName, thumbnailPath) => dispatch(updateMarkerThumbnail(locationName, thumbnailPath))
   };
 };
 
