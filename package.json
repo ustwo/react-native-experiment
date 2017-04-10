@@ -15,7 +15,6 @@
     "react-native-fetch-blob": "^0.10.2",
     "react-native-maps": "^0.13.0",
     "react-redux": "^5.0.3",
-    "realm": "^1.0.2",
     "redux": "^3.6.0",
     "redux-thunk": "^2.2.0",
     "traverse": "^0.6.6"
