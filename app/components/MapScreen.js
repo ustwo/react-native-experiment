@@ -22,7 +22,7 @@ import InstagramAuth from './InstagramAuth';
 import { channelOneSource, channelTwoSource, channelTwoAuthUrl } from '../config/feedSources';
 import Constants from '../config/Constants';
 import ImageDownloader from '../networking/ImageDownloader';
-import { channelOneFetchFeed, channelOneFeedsFetchSuccess, clearChannelTwo, channelTwoAddItem } from '../actions/actions';
+import { channelOneFetchFeed, clearChannelTwo, channelTwoAddItem } from '../actions/actions';
 
 const screen = Dimensions.get('window');
 
@@ -309,7 +309,6 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
   return {
     channelOneFetchFeed: (url) => dispatch(channelOneFetchFeed(url)),
-    channelOneFetchSuccess: (url, feed) => dispatch(channelOneFeedsFetchSuccess(url, feed)),
     clearChannelTwo: () => dispatch(clearChannelTwo()),
     channelTwoAddItem: (image) => dispatch(channelTwoAddItem(image))
   };
